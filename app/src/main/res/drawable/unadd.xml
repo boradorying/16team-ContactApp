@@ -7,9 +7,6 @@
       android:pathData="M63,63m-50,0a50,50 0,1 1,100 0a50,50 0,1 1,-100 0"
       android:fillColor="#DBEA8D"/>
   <path
-      android:pathData="M28,28h70v70h-70z"
-      android:fillColor="url(#pattern0)"/>
-  <path
       android:pathData="M62.5,62.5m-62.5,0a62.5,62.5 0,1 1,125 0a62.5,62.5 0,1 1,-125 0"
       android:fillColor="#EDEFE4"/>
   <path
