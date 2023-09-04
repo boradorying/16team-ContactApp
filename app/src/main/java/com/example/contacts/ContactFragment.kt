@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.LinearInterpolator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.contacts.databinding.FragmentContactBinding
@@ -25,6 +24,14 @@ class ContactFragment : Fragment() {
 
         contactAdapter = ContactAdapter(contactItems, isGridMode)
         setLayoutManager()
+
+        //itemClick(ms)
+        contactAdapter.productClick = object : ContactAdapter.ProductClick {
+            override fun onClick(view: View, position: Int) {
+                startActivity(DetailActivity.newIntentForDetail(context,position))
+            }
+        }
+        //itemClick(ms)
 
         binding.gridBtn.setOnClickListener {
             isGridMode = true
