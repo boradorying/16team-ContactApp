@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="button">#DBEA8D</color>
+    <color name="clickedButton">#BFD93C</color>
+    <color name="tap">#FAFCEE</color>
+    <color name="selectedTab">#DBEA8D</color>
+    <color name="background">#EDEFE4</color>
+
+</resources>
