@@ -2,6 +2,7 @@ package com.example.contacts
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
@@ -14,6 +15,13 @@ class ContactAdapter(
 
     private val VIEW_TYPE_LIST = 1
     private val VIEW_TYPE_GRID = 2
+
+    //itemClick(ms)
+    var productClick: ProductClick? = null
+    interface ProductClick {
+        fun onClick(view: View, position: Int)
+    }
+    //itemClick(ms)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutResId = if (viewType == VIEW_TYPE_GRID) {
@@ -38,6 +46,13 @@ class ContactAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bindItems(contact[position])
+
+        //itemClick(ms)
+        holder.itemView.setOnClickListener {
+            productClick?.onClick(it, position)
+        }
+        //itemClick(ms)
+
     }
 
     inner class ViewHolder(private val binding: RvItemBinding) :
