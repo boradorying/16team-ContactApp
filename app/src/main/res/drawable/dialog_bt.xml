@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 선택됐을 때의 배경 -->
+    <item android:state_selected="true">
+        <shape>
+            <solid android:color="@color/light_green" />
+            <corners android:radius="30dp" />
+        </shape>
+    </item>
+    <!-- 선택되지 않았을 때의 배경 -->
+    <item>
+        <shape>
+            <solid android:color="@color/green" />
+            <corners android:radius="30dp" />
+        </shape>
+    </item>
+</selector>
