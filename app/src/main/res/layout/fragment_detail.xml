@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".MyPageFragment">
-
+    tools:context=".DetailFragment">
 
     <TextView
         android:id="@+id/tv_name"
@@ -54,8 +53,8 @@
         android:layout_margin="10dp"
         android:text="@string/mobile"
         android:textColor="@color/black"
-
         android:textSize="20sp"
+
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/iv_call"
         app:layout_constraintTop_toTopOf="@+id/iv_call" />
@@ -85,8 +84,8 @@
         android:text="@string/email"
         android:textColor="@color/black"
         android:textSize="20sp"
-        android:textStyle="bold"
 
+        android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@id/iv_email"
         app:layout_constraintTop_toTopOf="@id/iv_email" />
 
@@ -115,7 +114,6 @@
         android:text="@string/notification"
         android:textColor="@color/black"
         android:textSize="20sp"
-
         android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@id/iv_notification"
         app:layout_constraintTop_toTopOf="@id/iv_notification" />
@@ -128,28 +126,5 @@
         app:layout_constraintLeft_toLeftOf="@id/tv3"
         app:layout_constraintTop_toBottomOf="@id/tv3" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_message"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_margin="20dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/unclicked_message"
-        app:fabCustomSize="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:maxImageSize="50dp" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_call"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_margin="20dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/unclicked_call"
-        app:fabCustomSize="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:maxImageSize="50dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
