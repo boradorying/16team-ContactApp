@@ -9,4 +9,5 @@
     <color name="background">#EDEFE4</color>
     <color name="cancel">#D8EAD6</color>
     <color name="selectedCancel">#9CD496</color>
+    <color name="transparent">#00FF0000</color>
 </resources>
