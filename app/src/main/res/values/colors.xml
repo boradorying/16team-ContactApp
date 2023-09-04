@@ -7,5 +7,6 @@
     <color name="tap">#FAFCEE</color>
     <color name="selectedTab">#DBEA8D</color>
     <color name="background">#EDEFE4</color>
-
+    <color name="cancel">#D8EAD6</color>
+    <color name="selectedCancel">#9CD496</color>
 </resources>
