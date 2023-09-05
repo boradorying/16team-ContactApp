@@ -1,28 +1,40 @@
-// ContactFragment.kt
 package com.example.contacts
 
-
+import ContactAdapter
 import android.app.AlertDialog
 import android.os.Bundle
-import ContactAdapter
+
+import android.content.Intent
+import android.net.Uri
+import android.provider.MediaStore
+import android.app.Activity
+
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
+
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.contacts.databinding.FragmentContactBinding
-//프래그먼트에 플로팅버튼 테두리 초록색?? 만져보기!!!!
+import de.hdodenhof.circleimageview.CircleImageView
+
+
 class ContactFragment : Fragment() {
     private lateinit var binding: FragmentContactBinding
     private lateinit var contactAdapter: ContactAdapter
     private var isGridMode = false
     private val contactItems: MutableList<Contact> = mutableListOf()
+    private val PICK_IMAGE_REQUEST_CODE = 100
+    private lateinit var profileImage: CircleImageView
+    private var selectedImageUri: Uri? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +48,7 @@ class ContactFragment : Fragment() {
         binding.RVArea.adapter = contactAdapter
         setLayoutManager() // 초기 레이아웃 매니저 설정
 
+
         //itemClick(ms)
         contactAdapter.productClick = object : ContactAdapter.ProductClick {
             override fun onClick(view: View, position: Int) {
@@ -47,6 +60,7 @@ class ContactFragment : Fragment() {
             }
         }
         //itemClick(ms)
+
 
         binding.gridBtn.setOnClickListener {
             isGridMode = true
@@ -60,16 +74,16 @@ class ContactFragment : Fragment() {
             setButtonBackground()
         }
 
-
         binding.RVArea.adapter = contactAdapter
 
-        // [3]에서 floatingBtn을 클릭할 때 다이얼로그를 표시
+        // 리싸이클러뷰에서 floatingBtn을 클릭할 때 다이얼로그를 표시
         binding.floatingBtn.setOnClickListener {
             showAddContactDialog()
         }
 
         contactItems.clear()
         contactItems.addAll(ContactsManager.contactsList)
+
 
 
         binding.searchEdit.addTextChangedListener(object : TextWatcher {
@@ -82,6 +96,7 @@ class ContactFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable?) {}
         })
+
 
 
         return binding.root
@@ -101,6 +116,15 @@ class ContactFragment : Fragment() {
         val numberEdit = dialogView.findViewById<EditText>(R.id.numberEdit)
         val emailEdit = dialogView.findViewById<EditText>(R.id.eMailEdit)
         val eventEdit = dialogView.findViewById<EditText>(R.id.eventEdit)
+        val addPhotoBtn = dialogView.findViewById<ImageButton>(R.id.addPhotoBtn)
+
+        // addPhotoBtn 클릭 이벤트 설정
+        addPhotoBtn.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(intent, PICK_IMAGE_REQUEST_CODE)
+        }
+
+        profileImage = dialogView.findViewById(R.id.profileImage)
 
         dialogView.findViewById<Button>(R.id.saveBt)?.setOnClickListener {
             val name = nameEdit.text.toString()
@@ -109,9 +133,11 @@ class ContactFragment : Fragment() {
             val event = eventEdit.text.toString()
 
             // 필수 정보가 입력되었는지 확인
-            if (name.isNotEmpty() && phoneNumber.isNotEmpty() && email.isNotEmpty()&& event.isNotEmpty()) {
+            if (name.isNotEmpty() && phoneNumber.isNotEmpty() && email.isNotEmpty() && event.isNotEmpty()) {
                 // Contact로 사용자 입력 정보 전달
-                ContactsManager.addContact(name, phoneNumber, email, event)
+                val newContact = Contact(name, phoneNumber, email, R.drawable.me, false)
+                contactItems.add(newContact)
+                contactAdapter.notifyItemInserted(contactItems.size - 1) // 아이템 추가를 알림
 
                 // 다이얼로그 닫기
                 dialog.dismiss()
@@ -130,6 +156,18 @@ class ContactFragment : Fragment() {
         }
 
         dialog.show()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            selectedImageUri = data.data
+            if (selectedImageUri != null) {
+                // 이미지를 "profileImage"에 설정
+                profileImage.setImageURI(selectedImageUri)
+            }
+        }
     }
 
     private fun setLayoutManager() {
