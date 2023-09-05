@@ -1,12 +1,9 @@
 package com.example.contacts
 
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
-import android.graphics.drawable.ColorDrawable
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 

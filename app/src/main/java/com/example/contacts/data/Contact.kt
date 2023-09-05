@@ -1,13 +1,12 @@
-package com.example.contacts
+package com.example.contacts.data
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
-
 @Parcelize
 data class Contact(
     val name: String,
     val phoneNumber: String,
     val email: String,
     val photo: Int,
-    var bookmark : Boolean
+    var bookmark: Boolean
 ) : Parcelable
