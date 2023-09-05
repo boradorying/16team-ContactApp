@@ -180,6 +180,16 @@ class ContactFragment : Fragment() {
         }
         contactAdapter = ContactAdapter(contactItems, isGridMode) // 어댑터 다시설정!!!!!!!!!
         binding.RVArea.adapter = contactAdapter // 어댑터를 다시 설정해주는건 버튼을 눌렀을때 어댑터가 그냥 그리드뷰로 바뀌기 때문에 초기화해주기
+
+        contactAdapter.productClick = object : ContactAdapter.ProductClick {
+            override fun onClick(view: View, position: Int) {
+                startActivity(
+                    DetailActivity.newIntentForDetail(
+                        context, contactItems[position]
+                    )
+                )
+            }
+        }
         contactAdapter.notifyDataSetChanged()
     }
 
