@@ -44,19 +44,17 @@ class MainActivity : AppCompatActivity() {
                 val customView = tab?.customView
                 val tabBinding = TabItemBinding.bind(customView!!)
                 when (tab?.position) {
-                    0 -> {
-                        tabBinding.tabIcon.setImageResource(R.drawable.clicked_contact)
-                        tabBinding.tabTxt.setTextColor(ResourcesCompat.getColor(resources, R.color.white, null))
-                    }
-                    1 -> {
-                        tabBinding.tabIcon.setImageResource(R.drawable.clicked_user)
-                        tabBinding.tabTxt.setTextColor(ResourcesCompat.getColor(resources, R.color.white, null))
-                    }
-                    else -> {
-                        // 기타 탭
-                    }
+                    0 -> tabBinding.tabIcon.setImageResource(R.drawable.clicked_contact)
+                    1 -> tabBinding.tabIcon.setImageResource(R.drawable.clicked_user)
                 }
                 tabBinding.tabTxt.typeface = Typeface.create(typeface, Typeface.BOLD)
+                tabBinding.tabTxt.setTextColor(
+                    ResourcesCompat.getColor(
+                        resources,
+                        R.color.white,
+                        null
+                    )
+                )
             }
 
             // 클릭 안 되었을 때
@@ -64,19 +62,18 @@ class MainActivity : AppCompatActivity() {
                 val customView = tab?.customView
                 val tabBinding = TabItemBinding.bind(customView!!)
                 when (tab?.position) {
-                    0 -> {
-                        tabBinding.tabIcon.setImageResource(R.drawable.unclicked_contact)
-                        tabBinding.tabTxt.setTextColor(ResourcesCompat.getColor(resources, R.color.black, null))
-                    }
-                    1 -> {
-                        tabBinding.tabIcon.setImageResource(R.drawable.unclicked_user)
-                        tabBinding.tabTxt.setTextColor(ResourcesCompat.getColor(resources, R.color.black, null))
-                    }
-                    else -> {
-                        // 기타 탭
-                    }
+                    0 -> tabBinding.tabIcon.setImageResource(R.drawable.unclicked_contact)
+
+                    1 -> tabBinding.tabIcon.setImageResource(R.drawable.unclicked_user)
                 }
                 tabBinding.tabTxt.typeface = Typeface.create(typeface, Typeface.NORMAL)
+                tabBinding.tabTxt.setTextColor(
+                    ResourcesCompat.getColor(
+                        resources,
+                        R.color.black,
+                        null
+                    )
+                )
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {}
@@ -90,10 +87,12 @@ class MainActivity : AppCompatActivity() {
                     tabBinding.tabIcon.setImageResource(R.drawable.unclicked_contact)
                     tabBinding.tabTxt.text = "CONTACT"
                 }
+
                 1 -> {
                     tabBinding.tabIcon.setImageResource(R.drawable.unclicked_user)
                     tabBinding.tabTxt.text = "MYPAGE"
                 }
+
                 else -> {
                     tabBinding.tabTxt.text = "Tab ${position + 1}"
                 }
