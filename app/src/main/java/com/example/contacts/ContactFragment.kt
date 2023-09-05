@@ -1,14 +1,15 @@
 package com.example.contacts
-import com.example.contacts.Adapter.ContactAdapter
-import android.app.AlertDialog
-import android.os.Bundle
-import android.content.Intent
-import android.net.Uri
-import android.provider.MediaStore
+
+
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.Intent
+
+import android.net.Uri
+import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,14 +17,17 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
+
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.contacts.databinding.FragmentContactBinding
-import de.hdodenhof.circleimageview.CircleImageView
+import com.example.contacts.Adapter.ContactAdapter
 import com.example.contacts.Util.callPhoneNumber
 import com.example.contacts.data.Contact
 import com.example.contacts.data.ContactsManager
+import com.example.contacts.databinding.FragmentContactBinding
+import de.hdodenhof.circleimageview.CircleImageView
 
 class ContactFragment : Fragment() {
     private lateinit var binding: FragmentContactBinding
@@ -140,6 +144,7 @@ class ContactFragment : Fragment() {
                 // Contact로 사용자 입력 정보 전달
                 val newContact = Contact(name, phoneNumber, email, R.drawable.me, false)
                 contactItems.add(newContact)
+                contactItems.sortBy { it.name }
                 contactAdapter.notifyItemInserted(contactItems.size - 1) // 아이템 추가를 알림
 
                 // 다이얼로그 닫기
@@ -182,8 +187,17 @@ class ContactFragment : Fragment() {
             binding.RVArea.layoutManager = layoutManager
         }
         contactAdapter = ContactAdapter(contactItems, isGridMode) // 어댑터 다시설정!!!!!!!!!
-        binding.RVArea.adapter =
-            contactAdapter // 어댑터를 다시 설정해주는건 버튼을 눌렀을때 어댑터가 그냥 그리드뷰로 바뀌기 때문에 초기화해주기
+        binding.RVArea.adapter = contactAdapter // 어댑터를 다시 설정해주는건 버튼을 눌렀을때 어댑터가 그냥 그리드뷰로 바뀌기 때문에 초기화해주기
+
+        contactAdapter.productClick = object : ContactAdapter.ProductClick {
+            override fun onClick(view: View, position: Int) {
+                startActivity(
+                    DetailActivity.newIntentForDetail(
+                        context, contactItems[position]
+                    )
+                )
+            }
+        }
         contactAdapter.notifyDataSetChanged()
     }
 
