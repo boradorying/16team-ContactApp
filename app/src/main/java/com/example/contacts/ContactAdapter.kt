@@ -21,6 +21,12 @@ class ContactAdapter(
         fun onClick(view: View, position: Int)
     }
     // itemClick(ms)
+    fun updateContactList(newList: List<Contact>) {
+        contact.clear()
+        contact.addAll(newList)
+        notifyDataSetChanged()
+    }//프래그먼트에서  함수호출하는거임
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)

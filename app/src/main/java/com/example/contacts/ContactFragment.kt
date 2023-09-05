@@ -4,22 +4,20 @@ package com.example.contacts
 
 import android.app.AlertDialog
 import android.os.Bundle
-
 import ContactAdapter
-
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.contacts.databinding.FragmentContactBinding
-
+//프래그먼트에 플로팅버튼 테두리 초록색?? 만져보기!!!!
 class ContactFragment : Fragment() {
     private lateinit var binding: FragmentContactBinding
     private lateinit var contactAdapter: ContactAdapter
@@ -61,8 +59,26 @@ class ContactFragment : Fragment() {
         contactItems.clear()
         contactItems.addAll(ContactsManager.contactsList)
 
+        binding.searchBtn.setOnClickListener {//버튼 기능이 아직 말을 안듣네
+            val query = binding.searchEdit.text.toString()
+            performSearch(query)
+        }
+        binding.searchEdit.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val query = s.toString()
+                performSearch(query)
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
 
         return binding.root
+
+
+
     }
 
     // 다이얼로그를 표시하는 함수
@@ -119,5 +135,13 @@ class ContactFragment : Fragment() {
         binding.RVArea.adapter = contactAdapter // 어댑터를 다시 설정해주는건 버튼을 눌렀을때 어댑터가 그냥 그리드뷰로 바뀌기 때문에 초기화해주기
         contactAdapter.notifyDataSetChanged()
     }
+
+    private fun performSearch(query: String) {
+        val filteredList = ContactsManager.contactsList.filter { contact ->
+            contact.name.contains(query, true) // 이름에 검색어가 포함된 경우 검색
+        }
+        contactAdapter.updateContactList(filteredList)
+    }
+
 
 }
