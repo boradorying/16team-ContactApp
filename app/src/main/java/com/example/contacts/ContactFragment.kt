@@ -8,6 +8,7 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import android.app.Activity
+import android.content.pm.PackageManager
 
 import android.text.Editable
 import android.text.TextWatcher
@@ -20,11 +21,16 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.contacts.databinding.FragmentContactBinding
 import de.hdodenhof.circleimageview.CircleImageView
+
+import android.Manifest
 
 
 class ContactFragment : Fragment() {
@@ -35,6 +41,10 @@ class ContactFragment : Fragment() {
     private val PICK_IMAGE_REQUEST_CODE = 100
     private lateinit var profileImage: CircleImageView
     private var selectedImageUri: Uri? = null
+
+    companion object {
+        private const val REQUEST_PHONE_CALL = 1
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +58,15 @@ class ContactFragment : Fragment() {
         binding.RVArea.adapter = contactAdapter
         setLayoutManager() // 초기 레이아웃 매니저 설정
 
+        // ItemTouchHelper 추가
+        val touchHelperCallback = ItemTouchHelperCallback(0, ItemTouchHelper.RIGHT) { position ->
+            callPhoneNumber(contactItems[position].phoneNumber)
+            // 스와이프 후 사라진 아이템 복구
+            contactAdapter.notifyItemChanged(position)
+        }
+
+        val itemTouchHelper = ItemTouchHelper(touchHelperCallback)
+        itemTouchHelper.attachToRecyclerView(binding.RVArea)
 
         //itemClick(ms)
         contactAdapter.productClick = object : ContactAdapter.ProductClick {
@@ -103,6 +122,17 @@ class ContactFragment : Fragment() {
 
 
 
+    }
+
+    private fun callPhoneNumber(phoneNumber: String) {
+        val callIntent = Intent(Intent.ACTION_CALL)
+        callIntent.data = Uri.parse("tel:$phoneNumber")
+
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.CALL_PHONE), REQUEST_PHONE_CALL)
+            return
+        }
+        startActivity(callIntent)
     }
 
     // 다이얼로그를 표시하는 함수
