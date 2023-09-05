@@ -137,6 +137,7 @@ class ContactFragment : Fragment() {
                 // Contact로 사용자 입력 정보 전달
                 val newContact = Contact(name, phoneNumber, email, R.drawable.me, false)
                 contactItems.add(newContact)
+                contactItems.sortBy { it.name }
                 contactAdapter.notifyItemInserted(contactItems.size - 1) // 아이템 추가를 알림
 
                 // 다이얼로그 닫기
