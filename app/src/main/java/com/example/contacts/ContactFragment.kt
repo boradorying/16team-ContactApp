@@ -1,15 +1,21 @@
 // ContactFragment.kt
 package com.example.contacts
 
+
 import android.app.AlertDialog
 import android.os.Bundle
+
+import ContactAdapter
+
+import androidx.fragment.app.Fragment
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.fragment.app.Fragment
+
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.contacts.databinding.FragmentContactBinding
@@ -18,6 +24,7 @@ class ContactFragment : Fragment() {
     private lateinit var binding: FragmentContactBinding
     private lateinit var contactAdapter: ContactAdapter
     private var isGridMode = false
+    private val contactItems: MutableList<Contact> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,20 +32,24 @@ class ContactFragment : Fragment() {
     ): View? {
         binding = FragmentContactBinding.inflate(inflater, container, false)
 
-        contactAdapter = ContactAdapter(ContactsManager.contactsList, isGridMode)
-        setLayoutManager()
+
+
+        // 초기에 어댑터를 생성하고 RecyclerView에 설정
+        contactAdapter = ContactAdapter(contactItems, isGridMode)
+        binding.RVArea.adapter = contactAdapter
+        setLayoutManager() // 초기 레이아웃 매니저 설정
+
 
         binding.gridBtn.setOnClickListener {
             isGridMode = true
             setLayoutManager()
-            contactAdapter.notifyDataSetChanged()
         }
 
         binding.listBtn.setOnClickListener {
             isGridMode = false
             setLayoutManager()
-            contactAdapter.notifyDataSetChanged()
         }
+
 
         binding.RVArea.adapter = contactAdapter
 
@@ -46,6 +57,10 @@ class ContactFragment : Fragment() {
         binding.floatingBtn.setOnClickListener {
             showAddContactDialog()
         }
+
+        contactItems.clear()
+        contactItems.addAll(ContactsManager.contactsList)
+
 
         return binding.root
     }
@@ -94,9 +109,15 @@ class ContactFragment : Fragment() {
 
     private fun setLayoutManager() {
         if (isGridMode) {
-            binding.RVArea.layoutManager = GridLayoutManager(requireContext(), 3)
+            val layoutManager = GridLayoutManager(requireContext(), 3)
+            binding.RVArea.layoutManager = layoutManager
         } else {
-            binding.RVArea.layoutManager = LinearLayoutManager(requireContext())
+            val layoutManager = LinearLayoutManager(requireContext())
+            binding.RVArea.layoutManager = layoutManager
         }
+        contactAdapter = ContactAdapter(contactItems, isGridMode) // 어댑터 다시설정!!!!!!!!!
+        binding.RVArea.adapter = contactAdapter // 어댑터를 다시 설정해주는건 버튼을 눌렀을때 어댑터가 그냥 그리드뷰로 바뀌기 때문에 초기화해주기
+        contactAdapter.notifyDataSetChanged()
     }
+
 }
