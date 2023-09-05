@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.example.contacts.databinding.ActivityDetailBinding
 
 class DetailActivity : AppCompatActivity() {
@@ -27,6 +28,11 @@ class DetailActivity : AppCompatActivity() {
             ivUser.setImageResource(detailContact.photo)
             btnCancel.setOnClickListener {
                 finish()
+            }
+
+
+            fabCall.setOnClickListener {
+                Toast.makeText(this@DetailActivity,"00",Toast.LENGTH_SHORT).show()
             }
         }
     }
