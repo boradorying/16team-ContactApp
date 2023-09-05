@@ -17,7 +17,6 @@ import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.contacts.databinding.FragmentContactBinding
-
 //프래그먼트에 플로팅버튼 테두리 초록색?? 만져보기!!!!
 class ContactFragment : Fragment() {
     private lateinit var binding: FragmentContactBinding
@@ -30,6 +29,7 @@ class ContactFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentContactBinding.inflate(inflater, container, false)
+
 
         // 초기에 어댑터를 생성하고 RecyclerView에 설정
         contactAdapter = ContactAdapter(contactItems, isGridMode)
@@ -51,11 +51,13 @@ class ContactFragment : Fragment() {
         binding.gridBtn.setOnClickListener {
             isGridMode = true
             setLayoutManager()
+            setButtonBackground()
         }
 
         binding.listBtn.setOnClickListener {
             isGridMode = false
             setLayoutManager()
+            setButtonBackground()
         }
 
 
@@ -69,10 +71,7 @@ class ContactFragment : Fragment() {
         contactItems.clear()
         contactItems.addAll(ContactsManager.contactsList)
 
-        binding.searchBtn.setOnClickListener {//버튼 기능이 아직 말을 안듣네
-            val query = binding.searchEdit.text.toString()
-            performSearch(query)
-        }
+
         binding.searchEdit.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -88,12 +87,12 @@ class ContactFragment : Fragment() {
         return binding.root
 
 
+
     }
 
     // 다이얼로그를 표시하는 함수
     private fun showAddContactDialog() {
-        val dialogView =
-            LayoutInflater.from(requireContext()).inflate(R.layout.add_contact_dialog, null)
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.add_contact_dialog, null)
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .create()
@@ -110,7 +109,7 @@ class ContactFragment : Fragment() {
             val event = eventEdit.text.toString()
 
             // 필수 정보가 입력되었는지 확인
-            if (name.isNotEmpty() && phoneNumber.isNotEmpty() && email.isNotEmpty() && event.isNotEmpty()) {
+            if (name.isNotEmpty() && phoneNumber.isNotEmpty() && email.isNotEmpty()&& event.isNotEmpty()) {
                 // Contact로 사용자 입력 정보 전달
                 ContactsManager.addContact(name, phoneNumber, email, event)
 
@@ -142,8 +141,7 @@ class ContactFragment : Fragment() {
             binding.RVArea.layoutManager = layoutManager
         }
         contactAdapter = ContactAdapter(contactItems, isGridMode) // 어댑터 다시설정!!!!!!!!!
-        binding.RVArea.adapter =
-            contactAdapter // 어댑터를 다시 설정해주는건 버튼을 눌렀을때 어댑터가 그냥 그리드뷰로 바뀌기 때문에 초기화해주기
+        binding.RVArea.adapter = contactAdapter // 어댑터를 다시 설정해주는건 버튼을 눌렀을때 어댑터가 그냥 그리드뷰로 바뀌기 때문에 초기화해주기
         contactAdapter.notifyDataSetChanged()
     }
 
@@ -153,6 +151,13 @@ class ContactFragment : Fragment() {
         }
         contactAdapter.updateContactList(filteredList)
     }
-
-
+    private fun setButtonBackground() {
+        if (isGridMode) {
+            binding.gridBtn.setBackgroundResource(R.drawable.clicked_grid)
+            binding.listBtn.setBackgroundResource(R.drawable.unclicked_list)
+        } else {
+            binding.gridBtn.setBackgroundResource(R.drawable.uncilcked_grid)
+            binding.listBtn.setBackgroundResource(R.drawable.clicked_list)
+        }
+    }
 }
