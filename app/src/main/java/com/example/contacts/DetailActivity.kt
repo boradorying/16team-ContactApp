@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.example.contacts.Util.callPhoneNumber
 import com.example.contacts.databinding.ActivityDetailBinding
 
 class DetailActivity : AppCompatActivity() {
@@ -29,10 +30,9 @@ class DetailActivity : AppCompatActivity() {
             btnCancel.setOnClickListener {
                 finish()
             }
-
-
+            
             fabCall.setOnClickListener {
-                Toast.makeText(this@DetailActivity,"00",Toast.LENGTH_SHORT).show()
+                callPhoneNumber(this@DetailActivity , detailContact.phoneNumber)
             }
         }
     }
