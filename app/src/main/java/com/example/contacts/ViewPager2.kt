@@ -5,12 +5,12 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class ViewPager2 (
+class ViewPager2(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle
 ) : FragmentStateAdapter(fragmentManager, lifecycle) {
     override fun createFragment(position: Int): Fragment {
-        return when(position) {
+        return when (position) {
             0 -> ContactFragment()
             1 -> MyPageFragment()
             else -> throw IllegalArgumentException("Invalid position: $position")
