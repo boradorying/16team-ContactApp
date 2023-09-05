@@ -1,19 +1,14 @@
 package com.example.contacts
-
-import ContactAdapter
+import com.example.contacts.Adapter.ContactAdapter
 import android.app.AlertDialog
 import android.os.Bundle
-
 import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import android.app.Activity
-import android.content.pm.PackageManager
-
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,17 +16,14 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.contacts.databinding.FragmentContactBinding
 import de.hdodenhof.circleimageview.CircleImageView
-
-import android.Manifest
-
+import com.example.contacts.Util.callPhoneNumber
+import com.example.contacts.data.Contact
+import com.example.contacts.data.ContactsManager
 
 class ContactFragment : Fragment() {
     private lateinit var binding: FragmentContactBinding
@@ -43,7 +35,7 @@ class ContactFragment : Fragment() {
     private var selectedImageUri: Uri? = null
 
     companion object {
-        private const val REQUEST_PHONE_CALL = 1
+        const val REQUEST_PHONE_CALL = 1
     }
 
     override fun onCreateView(
@@ -60,7 +52,7 @@ class ContactFragment : Fragment() {
 
         // ItemTouchHelper 추가
         val touchHelperCallback = ItemTouchHelperCallback(0, ItemTouchHelper.RIGHT) { position ->
-            callPhoneNumber(contactItems[position].phoneNumber)
+            callPhoneNumber(requireActivity(), contactItems[position].phoneNumber)
             // 스와이프 후 사라진 아이템 복구
             contactAdapter.notifyItemChanged(position)
         }
@@ -79,7 +71,6 @@ class ContactFragment : Fragment() {
             }
         }
         //itemClick(ms)
-
 
         binding.gridBtn.setOnClickListener {
             isGridMode = true
@@ -103,8 +94,6 @@ class ContactFragment : Fragment() {
         contactItems.clear()
         contactItems.addAll(ContactsManager.contactsList)
 
-
-
         binding.searchEdit.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -115,29 +104,13 @@ class ContactFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable?) {}
         })
-
-
-
         return binding.root
-
-
-
-    }
-
-    private fun callPhoneNumber(phoneNumber: String) {
-        val callIntent = Intent(Intent.ACTION_CALL)
-        callIntent.data = Uri.parse("tel:$phoneNumber")
-
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.CALL_PHONE), REQUEST_PHONE_CALL)
-            return
-        }
-        startActivity(callIntent)
     }
 
     // 다이얼로그를 표시하는 함수
     private fun showAddContactDialog() {
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.add_contact_dialog, null)
+        val dialogView =
+            LayoutInflater.from(requireContext()).inflate(R.layout.add_contact_dialog, null)
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .create()
@@ -209,7 +182,8 @@ class ContactFragment : Fragment() {
             binding.RVArea.layoutManager = layoutManager
         }
         contactAdapter = ContactAdapter(contactItems, isGridMode) // 어댑터 다시설정!!!!!!!!!
-        binding.RVArea.adapter = contactAdapter // 어댑터를 다시 설정해주는건 버튼을 눌렀을때 어댑터가 그냥 그리드뷰로 바뀌기 때문에 초기화해주기
+        binding.RVArea.adapter =
+            contactAdapter // 어댑터를 다시 설정해주는건 버튼을 눌렀을때 어댑터가 그냥 그리드뷰로 바뀌기 때문에 초기화해주기
         contactAdapter.notifyDataSetChanged()
     }
 
@@ -219,6 +193,7 @@ class ContactFragment : Fragment() {
         }
         contactAdapter.updateContactList(filteredList)
     }
+
     private fun setButtonBackground() {
         if (isGridMode) {
             binding.gridBtn.setBackgroundResource(R.drawable.clicked_grid)
