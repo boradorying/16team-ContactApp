@@ -5,7 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.contacts.data.Contact
+import com.example.contacts.Contact
+
 import com.example.contacts.R
 import com.example.contacts.databinding.RvGridItemBinding
 import com.example.contacts.databinding.RvItemBinding
@@ -91,7 +92,7 @@ class ContactAdapter(
 
             if (item.bookmark) {
                 binding.bookmark.setBackgroundResource(R.drawable.clicked_bookmark)
-                Toast.makeText(binding.root.context,"즐겨찾기에 추가되었습니다~",Toast.LENGTH_SHORT).show()
+
             } else {
                 binding.bookmark.setBackgroundResource(R.drawable.unclicked_bookmark)
 

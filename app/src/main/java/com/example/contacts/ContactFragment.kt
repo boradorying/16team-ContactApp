@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.contacts.Adapter.ContactAdapter
 import com.example.contacts.Util.callPhoneNumber
-import com.example.contacts.data.Contact
+
 import com.example.contacts.databinding.FragmentContactBinding
 import de.hdodenhof.circleimageview.CircleImageView
 

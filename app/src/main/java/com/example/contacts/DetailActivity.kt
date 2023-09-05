@@ -5,7 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.contacts.Util.callPhoneNumber
-import com.example.contacts.data.Contact
+
 import com.example.contacts.databinding.ActivityDetailBinding
 
 class DetailActivity : AppCompatActivity() {
@@ -29,6 +29,7 @@ class DetailActivity : AppCompatActivity() {
             tvEmail.text = detailContact.email
             tvName.text = detailContact.name
             ivUser.setImageResource(detailContact.photo)
+
             btnCancel.setOnClickListener {
                 finish()
             }
