@@ -1,18 +1,16 @@
+// ContactFragment.kt
 package com.example.contacts
 
 import ContactAdapter
 import android.app.AlertDialog
-import android.os.Bundle
-
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.provider.MediaStore
 import android.app.Activity
-
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,12 +18,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
-
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.contacts.databinding.FragmentContactBinding
 import de.hdodenhof.circleimageview.CircleImageView
-
 
 class ContactFragment : Fragment() {
     private lateinit var binding: FragmentContactBinding
@@ -42,14 +38,12 @@ class ContactFragment : Fragment() {
     ): View? {
         binding = FragmentContactBinding.inflate(inflater, container, false)
 
-
         // 초기에 어댑터를 생성하고 RecyclerView에 설정
         contactAdapter = ContactAdapter(contactItems, isGridMode)
         binding.RVArea.adapter = contactAdapter
         setLayoutManager() // 초기 레이아웃 매니저 설정
 
-
-        //itemClick(ms)
+        // itemClick(ms)
         contactAdapter.productClick = object : ContactAdapter.ProductClick {
             override fun onClick(view: View, position: Int) {
                 startActivity(
@@ -59,8 +53,7 @@ class ContactFragment : Fragment() {
                 )
             }
         }
-        //itemClick(ms)
-
+        // itemClick(ms)
 
         binding.gridBtn.setOnClickListener {
             isGridMode = true
@@ -84,8 +77,6 @@ class ContactFragment : Fragment() {
         contactItems.clear()
         contactItems.addAll(ContactsManager.contactsList)
 
-
-
         binding.searchEdit.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -97,12 +88,7 @@ class ContactFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
-
-
         return binding.root
-
-
-
     }
 
     // 다이얼로그를 표시하는 함수
@@ -135,7 +121,8 @@ class ContactFragment : Fragment() {
             // 필수 정보가 입력되었는지 확인
             if (name.isNotEmpty() && phoneNumber.isNotEmpty() && email.isNotEmpty() && event.isNotEmpty()) {
                 // Contact로 사용자 입력 정보 전달
-                val newContact = Contact(name, phoneNumber, email, R.drawable.me, false)
+                val newContact = Contact(name, phoneNumber, email, selectedImageUri, R.drawable.ic_launcher_background,false)
+
                 contactItems.add(newContact)
                 contactAdapter.notifyItemInserted(contactItems.size - 1) // 아이템 추가를 알림
 
@@ -178,7 +165,7 @@ class ContactFragment : Fragment() {
             val layoutManager = LinearLayoutManager(requireContext())
             binding.RVArea.layoutManager = layoutManager
         }
-        contactAdapter = ContactAdapter(contactItems, isGridMode) // 어댑터 다시설정!!!!!!!!!
+        contactAdapter = ContactAdapter(contactItems, isGridMode) // 어댑터 다시 설정!!!!!!!!!
         binding.RVArea.adapter = contactAdapter // 어댑터를 다시 설정해주는건 버튼을 눌렀을때 어댑터가 그냥 그리드뷰로 바뀌기 때문에 초기화해주기
         contactAdapter.notifyDataSetChanged()
     }
@@ -189,6 +176,7 @@ class ContactFragment : Fragment() {
         }
         contactAdapter.updateContactList(filteredList)
     }
+
     private fun setButtonBackground() {
         if (isGridMode) {
             binding.gridBtn.setBackgroundResource(R.drawable.clicked_grid)
