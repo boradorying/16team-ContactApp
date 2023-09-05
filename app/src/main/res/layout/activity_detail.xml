@@ -159,6 +159,7 @@
         android:layout_margin="20dp"
         android:scaleType="centerCrop"
         android:src="@drawable/btn_message_pressed"
+        app:backgroundTint="@color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -170,6 +171,7 @@
         android:background="@null"
         android:backgroundTint="@color/green"
         android:scaleType="centerCrop"
+        app:backgroundTint="@color/transparent"
         android:src="@drawable/btn_call_pressed"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
