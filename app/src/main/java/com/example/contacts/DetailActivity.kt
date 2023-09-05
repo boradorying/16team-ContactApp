@@ -4,19 +4,36 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.example.contacts.databinding.ActivityDetailBinding
-import com.example.contacts.databinding.ActivityMainBinding
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
-
     companion object{
-        fun newIntentForDetail(context: Context?, position: Int) = Intent(context, DetailActivity::class.java)
+        private lateinit var detailContact : Contact
+        fun newIntentForDetail(context: Context?, contact: Contact) = Intent(context, DetailActivity::class.java).apply {
+            detailContact = contact
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.apply {
+            tvMobile.text = detailContact.phoneNumber
+            tvEmail.text = detailContact.email
+            tvName.text = detailContact.name
+            ivUser.setImageResource(detailContact.photo)
+            btnCancel.setOnClickListener {
+                finish()
+            }
+
+
+            fabCall.setOnClickListener {
+                Toast.makeText(this@DetailActivity,"00",Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }
