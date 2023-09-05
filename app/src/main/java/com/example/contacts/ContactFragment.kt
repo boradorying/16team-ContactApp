@@ -32,12 +32,18 @@ class ContactFragment : Fragment() {
     ): View? {
         binding = FragmentContactBinding.inflate(inflater, container, false)
 
-
-
         // 초기에 어댑터를 생성하고 RecyclerView에 설정
         contactAdapter = ContactAdapter(contactItems, isGridMode)
         binding.RVArea.adapter = contactAdapter
         setLayoutManager() // 초기 레이아웃 매니저 설정
+
+        //itemClick(ms)
+        contactAdapter.productClick = object : ContactAdapter.ProductClick {
+            override fun onClick(view: View, position: Int) {
+                startActivity(DetailActivity.newIntentForDetail(context,position))
+            }
+        }
+        //itemClick(ms)
 
 
         binding.gridBtn.setOnClickListener {
