@@ -121,7 +121,7 @@ class ContactFragment : Fragment() {
             // 필수 정보가 입력되었는지 확인
             if (name.isNotEmpty() && phoneNumber.isNotEmpty() && email.isNotEmpty() && event.isNotEmpty()) {
                 // Contact로 사용자 입력 정보 전달
-                val newContact = Contact(name, phoneNumber, email, selectedImageUri, R.drawable.ic_launcher_background,false)
+                val newContact = Contact(name, phoneNumber, email, selectedImageUri, R.drawable.ic_launcher_background,false,true)
 
                 contactItems.add(newContact)
                 contactAdapter.notifyItemInserted(contactItems.size - 1) // 아이템 추가를 알림

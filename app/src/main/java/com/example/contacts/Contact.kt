@@ -11,5 +11,6 @@ data class Contact(
     val email: String,
     val profileImageUri: Uri?,
     var photo: Int,
-    var bookmark: Boolean
+    var bookmark: Boolean,
+    var isNew: Boolean
 ) : Parcelable
