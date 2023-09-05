@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.contacts.databinding.FragmentContactBinding
+
 //프래그먼트에 플로팅버튼 테두리 초록색?? 만져보기!!!!
 class ContactFragment : Fragment() {
     private lateinit var binding: FragmentContactBinding
@@ -38,11 +39,14 @@ class ContactFragment : Fragment() {
         //itemClick(ms)
         contactAdapter.productClick = object : ContactAdapter.ProductClick {
             override fun onClick(view: View, position: Int) {
-                startActivity(DetailActivity.newIntentForDetail(context,position))
+                startActivity(
+                    DetailActivity.newIntentForDetail(
+                        context, contactItems[position]
+                    )
+                )
             }
         }
         //itemClick(ms)
-
 
         binding.gridBtn.setOnClickListener {
             isGridMode = true
@@ -84,12 +88,12 @@ class ContactFragment : Fragment() {
         return binding.root
 
 
-
     }
 
     // 다이얼로그를 표시하는 함수
     private fun showAddContactDialog() {
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.add_contact_dialog, null)
+        val dialogView =
+            LayoutInflater.from(requireContext()).inflate(R.layout.add_contact_dialog, null)
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .create()
@@ -106,7 +110,7 @@ class ContactFragment : Fragment() {
             val event = eventEdit.text.toString()
 
             // 필수 정보가 입력되었는지 확인
-            if (name.isNotEmpty() && phoneNumber.isNotEmpty() && email.isNotEmpty()&& event.isNotEmpty()) {
+            if (name.isNotEmpty() && phoneNumber.isNotEmpty() && email.isNotEmpty() && event.isNotEmpty()) {
                 // Contact로 사용자 입력 정보 전달
                 ContactsManager.addContact(name, phoneNumber, email, event)
 
@@ -138,7 +142,8 @@ class ContactFragment : Fragment() {
             binding.RVArea.layoutManager = layoutManager
         }
         contactAdapter = ContactAdapter(contactItems, isGridMode) // 어댑터 다시설정!!!!!!!!!
-        binding.RVArea.adapter = contactAdapter // 어댑터를 다시 설정해주는건 버튼을 눌렀을때 어댑터가 그냥 그리드뷰로 바뀌기 때문에 초기화해주기
+        binding.RVArea.adapter =
+            contactAdapter // 어댑터를 다시 설정해주는건 버튼을 눌렀을때 어댑터가 그냥 그리드뷰로 바뀌기 때문에 초기화해주기
         contactAdapter.notifyDataSetChanged()
     }
 
