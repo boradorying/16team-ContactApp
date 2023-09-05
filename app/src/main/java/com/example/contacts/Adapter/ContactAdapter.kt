@@ -3,10 +3,8 @@ package com.example.contacts.Adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.contacts.Contact
-
 import com.example.contacts.R
 import com.example.contacts.databinding.RvGridItemBinding
 import com.example.contacts.databinding.RvItemBinding
@@ -30,6 +28,7 @@ class ContactAdapter(
         contact.addAll(newList)
         notifyDataSetChanged()
     }//프래그먼트에서  함수호출하는거임
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
