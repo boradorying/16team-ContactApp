@@ -1,4 +1,3 @@
-// ContactFragment.kt
 package com.example.contacts
 
 
@@ -8,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
@@ -40,6 +40,7 @@ class ContactFragment : Fragment() {
 
     companion object {
         const val REQUEST_PHONE_CALL = 1
+        const val REQUEST_CODE_DETAIL = -1
     }
 
     override fun onCreateView(
@@ -68,11 +69,15 @@ class ContactFragment : Fragment() {
 
         contactAdapter.productClick = object : ContactAdapter.ProductClick {
             override fun onClick(view: View, position: Int) {
-                startActivity(
-                    DetailActivity.newIntentForDetail(
-                        context, contactItems[position]
-                    )
+                val detailIntent = DetailActivity.newIntentForDetail(
+                    context, contactItems[position]
                 )
+                startActivityForResult(detailIntent, REQUEST_CODE_DETAIL)
+                //민수님 여기 startActivity(
+                //                    DetailActivity.newIntentForDetail(
+                //                        context, contactItems[position]
+                //                    )
+                //                ) 이거인데 북마크 정보 받아오는것때문에 수정좀 했습니다..! 바뀐건 없습니다!
             }
         }
 
@@ -109,6 +114,8 @@ class ContactFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable?) {}
         })
+
+
 
         return binding.root
     }
@@ -154,15 +161,17 @@ class ContactFragment : Fragment() {
                     true
                 )
 
-                contactItems.add(newContact)
-                contactItems.sortBy { it.name }
-                contactAdapter.notifyItemInserted(contactItems.size - 1) // 아이템 추가를 알림
+                ContactsManager.contactsList.add(newContact)
+                ContactsManager.contactsList.sortBy { it.name }
+                contactItems.clear()
+                contactItems.addAll(ContactsManager.contactsList)
+                contactAdapter.notifyDataSetChanged()//컨택트아이템대신 컨택트리스트에 추가하고 컨택트아이템이랑 동기화 안대서 컨택트아이템지우고 새로추가된리스트를 아이템에 추가하는작업
 
                 // 다이얼로그 닫기
                 dialog.dismiss()
 
-                // RecyclerView 업데이트
-                contactAdapter.notifyDataSetChanged()
+
+
             } else {
                 // 필수 정보가 입력되지 않은 경우 토스트 메시지 표시
                 Toast.makeText(requireContext(), "입력되지 않은 정보가 있습니다", Toast.LENGTH_SHORT).show()
@@ -187,7 +196,26 @@ class ContactFragment : Fragment() {
                 profileImage.setImageURI(selectedImageUri)
             }
         }
+        else if (requestCode == REQUEST_CODE_DETAIL && resultCode == RESULT_OK) {
+
+            val updatedBookmark = data?.getBooleanExtra("BOOKMARK", false)
+
+            if (updatedBookmark != null) {
+                for (contact in contactItems) {//포문을 이용해서 컨택트 아이템의 아이템의 북마크에 접근해서 새로운값으로 초기화
+                    if (contact.bookmark) {
+                        contact.bookmark = updatedBookmark
+                    }
+                }
+                contactAdapter.notifyDataSetChanged()
+            }
+        }
     }
+
+
+
+
+
+
 
     private fun setLayoutManager() {
         if (isGridMode) {
@@ -198,8 +226,7 @@ class ContactFragment : Fragment() {
             binding.RVArea.layoutManager = layoutManager
         }
         contactAdapter = ContactAdapter(contactItems, isGridMode) // 어댑터 다시 설정!!!!!!!!!
-        binding.RVArea.adapter =
-            contactAdapter // 어댑터를 다시 설정해주는건 버튼을 눌렀을때 어댑터가 그냥 그리드뷰로 바뀌기 때문에 초기화해주기
+        binding.RVArea.adapter = contactAdapter // 어댑터를 다시 설정해주는건 버튼을 눌렀을때 어댑터가 그냥 그리드뷰로 바뀌기 때문에 바인딩해주고ㅓ 초기화
 
         contactAdapter.productClick = object : ContactAdapter.ProductClick {
             override fun onClick(view: View, position: Int) {
@@ -213,11 +240,13 @@ class ContactFragment : Fragment() {
         contactAdapter.notifyDataSetChanged()
     }
 
+
     private fun performSearch(query: String) {
-        val filteredList = ContactsManager.contactsList.filter { contact ->
+        val filteredList = ContactsManager.contactsList.filter { contact ->//컨택트아이템이 아닌 컨택트 매니저읰 컨택트리스트를 필터
             contact.name.contains(query, true) // 이름에 검색어가 포함된 경우 검색
         }
         contactAdapter.updateContactList(filteredList)
+
     }
 
     private fun setButtonBackground() {
