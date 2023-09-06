@@ -19,7 +19,7 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_marginTop="35dp"
-            android:src="@drawable/ic_launcher_background"
+            android:src="@drawable/un_selsected_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:ems="10"
-            android:inputType="text"
+            android:inputType="phone"
             android:hint="전화번호"
             android:textStyle="bold"
             android:fontFamily="@font/komi"
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:ems="10"
-            android:inputType="text"
+            android:inputType="textEmailAddress"
             android:hint="이메일"
             android:textStyle="bold"
             android:fontFamily="@font/komi"
@@ -120,4 +120,5 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

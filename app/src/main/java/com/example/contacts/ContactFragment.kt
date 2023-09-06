@@ -7,16 +7,13 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.ContentResolver
 import android.content.pm.PackageManager
 import android.provider.ContactsContract
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,16 +23,13 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.contacts.Adapter.ContactAdapter
 import com.example.contacts.Util.callPhoneNumber
-
 import com.example.contacts.databinding.FragmentContactBinding
 import de.hdodenhof.circleimageview.CircleImageView
-
 class ContactFragment : Fragment() {
     private lateinit var binding: FragmentContactBinding
     private lateinit var contactAdapter: ContactAdapter
@@ -97,7 +91,7 @@ class ContactFragment : Fragment() {
             showAddContactDialog()
         }
 
-        // contactItems.clear()
+        // contactItems.clear() //주석풀면 연락처 안받아와집니다!
         contactItems.addAll(ContactsManager.contactsList)
 
         binding.searchEdit.addTextChangedListener(object : TextWatcher {
@@ -144,17 +138,22 @@ class ContactFragment : Fragment() {
             // 필수 정보가 입력되었는지 확인
             if (name.isNotEmpty() && phoneNumber.isNotEmpty() && email.isNotEmpty() && event.isNotEmpty()) {
                 // Contact로 사용자 입력 정보 전달
+                var isNewBoolean = true
+                if(selectedImageUri == null)
+                {
+                    isNewBoolean = false
+                }
 
                 val newContact = Contact(
                     name,
                     phoneNumber,
                     email,
                     selectedImageUri,
-                    R.drawable.ic_launcher_background,
+                    R.drawable.un_selsected_image,
                     false,
-                    true
+                    isNewBoolean
                 )
-
+                selectedImageUri =null
                 ContactsManager.contactsList.add(newContact)
                 ContactsManager.contactsList.sortBy { it.name }
                 contactItems.clear()
@@ -269,13 +268,12 @@ class ContactFragment : Fragment() {
 
     //실제 연락처 가져오기
     private fun requirePermission() { // 허가
-        val permissions = arrayOf(Manifest.permission.READ_CONTACTS)
+        val permissions = arrayOf(android.Manifest.permission.READ_CONTACTS)
         val permissionCheck = ContextCompat.checkSelfPermission((activity as MainActivity), Manifest.permission.READ_CONTACTS)
         if (permissionCheck == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions((activity as MainActivity), permissions, 0)
         }
         else if(permissionCheck == PackageManager.PERMISSION_GRANTED){
-            Log.d("test1","11")
             getContact()
         }
     }
@@ -283,7 +281,6 @@ class ContactFragment : Fragment() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 0) {
-            Log.d("test1","12")
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getContact()
             } else {
@@ -311,7 +308,6 @@ class ContactFragment : Fragment() {
                 val number = cursor.getString(numberIndex)
                // val email = cursor.getString(emailIndex)
 
-                Log.d("tt","${contactItems.size}")
                 // 연락처 정보를 어댑터에 추가
 //                contactAdapter.addContact(
 //                    Contact(
