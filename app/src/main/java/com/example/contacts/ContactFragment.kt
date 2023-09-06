@@ -151,16 +151,22 @@ class ContactFragment : Fragment() {
             // 필수 정보가 입력되었는지 확인
             if (name.isNotEmpty() && phoneNumber.isNotEmpty() && email.isNotEmpty() && event.isNotEmpty()) {
                 // Contact로 사용자 입력 정보 전달
+                var isNewBoolean = true
+                if(selectedImageUri == null)
+                {
+                    isNewBoolean = false
+                }
+
                 val newContact = Contact(
                     name,
                     phoneNumber,
                     email,
                     selectedImageUri,
-                    R.drawable.ic_launcher_background,
+                    R.drawable.un_selsected_image,
                     false,
-                    true
+                    isNewBoolean
                 )
-
+                selectedImageUri =null
                 ContactsManager.contactsList.add(newContact)
                 ContactsManager.contactsList.sortBy { it.name }
                 contactItems.clear()
