@@ -158,7 +158,6 @@ class ContactFragment : Fragment() {
                 ContactsManager.contactsList.sortBy { it.name }
                 contactItems.clear()
                 contactItems.addAll(ContactsManager.contactsList)
-                contactAdapter.notifyDataSetChanged()//컨택트아이템대신 컨택트리스트에 추가하고 컨택트아이템이랑 동기화 안대서 컨택트아이템지우고 새로추가된리스트를 아이템에 추가하는작업
 
                 // 다이얼로그 닫기
                 dialog.dismiss()
