@@ -35,3 +35,5 @@ fun messagePhoneNumber(activity: Activity, phoneNumber: String){
     intent.putExtra("sms_body", "") // body에 전송할 내용입니다.
     activity.startActivity(intent)
 }
+
+

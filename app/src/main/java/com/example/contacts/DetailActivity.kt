@@ -4,10 +4,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Messenger
 import com.example.contacts.Util.callPhoneNumber
 import com.example.contacts.Util.messagePhoneNumber
-
 import com.example.contacts.databinding.ActivityDetailBinding
 import com.google.android.material.snackbar.Snackbar
 
