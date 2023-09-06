@@ -1,17 +1,19 @@
 package com.example.contacts
 
 
+import android.Manifest
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.app.Activity
 import android.app.Activity.RESULT_OK
+import android.content.ContentResolver
+import android.content.pm.PackageManager
+import android.provider.ContactsContract
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,16 +21,15 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
-
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.contacts.Adapter.ContactAdapter
 import com.example.contacts.Util.callPhoneNumber
-
 import com.example.contacts.databinding.FragmentContactBinding
 import de.hdodenhof.circleimageview.CircleImageView
-
 class ContactFragment : Fragment() {
     private lateinit var binding: FragmentContactBinding
     private lateinit var contactAdapter: ContactAdapter
@@ -53,7 +54,7 @@ class ContactFragment : Fragment() {
         contactAdapter = ContactAdapter(contactItems, isGridMode)
         binding.RVArea.adapter = contactAdapter
         setLayoutManager() // 초기 레이아웃 매니저 설정
-
+        requirePermission()//연락처 받아오기
 
         // ItemTouchHelper 추가
         val touchHelperCallback = ItemTouchHelperCallback(0, ItemTouchHelper.RIGHT) { position ->
@@ -65,35 +66,24 @@ class ContactFragment : Fragment() {
         val itemTouchHelper = ItemTouchHelper(touchHelperCallback)
         itemTouchHelper.attachToRecyclerView(binding.RVArea)
 
-
-
         contactAdapter.productClick = object : ContactAdapter.ProductClick {
             override fun onClick(view: View, position: Int) {
                 val detailIntent = DetailActivity.newIntentForDetail(
                     context, contactItems[position]
                 )
                 startActivityForResult(detailIntent, REQUEST_CODE_DETAIL)
-                //민수님 여기 startActivity(
-                //                    DetailActivity.newIntentForDetail(
-                //                        context, contactItems[position]
-                //                    )
-                //                ) 이거인데 북마크 정보 받아오는것때문에 수정좀 했습니다..! 바뀐건 없습니다!
             }
         }
-
-
         binding.gridBtn.setOnClickListener {
             isGridMode = true
             setLayoutManager()
             setButtonBackground()
         }
-
         binding.listBtn.setOnClickListener {
             isGridMode = false
             setLayoutManager()
             setButtonBackground()
         }
-
         binding.RVArea.adapter = contactAdapter
 
         // 리싸이클러뷰에서 floatingBtn을 클릭할 때 다이얼로그를 표시
@@ -101,7 +91,7 @@ class ContactFragment : Fragment() {
             showAddContactDialog()
         }
 
-        contactItems.clear()
+        // contactItems.clear() //주석풀면 연락처 안받아와집니다!
         contactItems.addAll(ContactsManager.contactsList)
 
         binding.searchEdit.addTextChangedListener(object : TextWatcher {
@@ -114,9 +104,6 @@ class ContactFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable?) {}
         })
-
-
-
         return binding.root
     }
 
@@ -171,24 +158,19 @@ class ContactFragment : Fragment() {
                 ContactsManager.contactsList.sortBy { it.name }
                 contactItems.clear()
                 contactItems.addAll(ContactsManager.contactsList)
-                contactAdapter.notifyDataSetChanged()//컨택트아이템대신 컨택트리스트에 추가하고 컨택트아이템이랑 동기화 안대서 컨택트아이템지우고 새로추가된리스트를 아이템에 추가하는작업
 
                 // 다이얼로그 닫기
                 dialog.dismiss()
-
-
 
             } else {
                 // 필수 정보가 입력되지 않은 경우 토스트 메시지 표시
                 Toast.makeText(requireContext(), "입력되지 않은 정보가 있습니다", Toast.LENGTH_SHORT).show()
             }
         }
-
         dialogView.findViewById<Button>(R.id.cancelBt)?.setOnClickListener {
             // 다이얼로그 닫기
             dialog.dismiss()
         }
-
         dialog.show()
     }
 
@@ -216,12 +198,6 @@ class ContactFragment : Fragment() {
             }
         }
     }
-
-
-
-
-
-
 
     private fun setLayoutManager() {
         if (isGridMode) {
@@ -271,11 +247,9 @@ class ContactFragment : Fragment() {
                 )[index]
                 chosungBuilder.append(chosung)
             } else {
-
                 chosungBuilder.append(char)
             }
         }
-
         return chosungBuilder.toString()
     }
 
@@ -289,4 +263,135 @@ class ContactFragment : Fragment() {
             binding.listBtn.setBackgroundResource(R.drawable.clicked_list)
         }
     }
+
+
+    //실제 연락처 가져오기
+    private fun requirePermission() { // 허가
+        val permissions = arrayOf(android.Manifest.permission.READ_CONTACTS)
+        val permissionCheck = ContextCompat.checkSelfPermission((activity as MainActivity), Manifest.permission.READ_CONTACTS)
+        if (permissionCheck == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions((activity as MainActivity), permissions, 0)
+        }
+        else if(permissionCheck == PackageManager.PERMISSION_GRANTED){
+            getContact()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 0) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getContact()
+            } else {
+                // 권한이 거부되었을 때 처리
+            }
+        }
+    }
+
+    private fun getContact() {
+        val resolver: ContentResolver = (activity as MainActivity).contentResolver
+        val phoneUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
+        val projection = arrayOf(
+            ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+            ContactsContract.CommonDataKinds.Phone.NUMBER
+        )
+
+        val cursor = resolver.query(phoneUri, projection, null, null, null)
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                val nameIndex = cursor.getColumnIndex(projection[1])
+                val numberIndex = cursor.getColumnIndex(projection[2])
+                //val emailIndex = cursor.getColumnIndex(projection[3])
+                val name = cursor.getString(nameIndex)
+                val number = cursor.getString(numberIndex)
+               // val email = cursor.getString(emailIndex)
+
+                // 연락처 정보를 어댑터에 추가
+//                contactAdapter.addContact(
+//                    Contact(
+//                        name,
+//                        number,
+//                        "22",
+//                        profileImageUri = null,
+//                        photo = R.drawable.unclicked_user,
+//                        bookmark = false,
+//                        isNew = false
+//                    )
+//                )
+                ContactsManager.contactsList.add(
+                    Contact(
+                        name,
+                        number,
+                        "22",
+                        profileImageUri = null,
+                        photo = R.drawable.unclicked_user,
+                        bookmark = false,
+                        isNew = false
+                    )
+                )
+            }
+            cursor.close()
+        }
+    }
+//    private fun getContact() {
+//        val resolver: ContentResolver = (activity as MainActivity).contentResolver
+//        val phoneUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
+//        val projection = arrayOf(
+//            ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
+//            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+//            ContactsContract.CommonDataKinds.Phone.NUMBER,
+//        )
+//        val cursor = resolver.query(phoneUri, projection, null, null, null)
+//        if (cursor != null) {
+//            while (cursor.moveToNext()) {
+//                val contactId = cursor.getColumnIndex(projection[0])
+//                val nameIndex = cursor.getColumnIndex(projection[1])
+//                val numberIndex = cursor.getColumnIndex(projection[2])
+//                val emailIndex = cursor.getColumnIndex(projection[3])
+//                val name = cursor.getString(nameIndex)
+//                val number = cursor.getString(numberIndex)
+//                val email = cursor.getString(emailIndex)
+//
+//                // 이메일 주소 가져오기
+//                val emailProjection = arrayOf(
+//                    ContactsContract.CommonDataKinds.Email.DATA
+//                )
+//                val emailCursor = resolver.query(
+//                    ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+//                    emailProjection,
+//                    ContactsContract.CommonDataKinds.Email.CONTACT_ID + "=?",
+//                    arrayOf(contactId.toString()),
+//                    null
+//                )
+//
+//                val emailList = mutableListOf<String>()
+//
+//                if (emailCursor != null) {
+//                    val emailDataIndex = emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA)
+//
+//                    while (emailCursor.moveToNext()) {
+//                        val email = emailCursor.getString(emailDataIndex)
+//                        emailList.add(email)
+//                    }
+//                    emailCursor.close()
+//                }
+//
+//
+//                // 연락처 정보를 어댑터에 추가
+//                contactAdapter.addContact(
+//                    Contact(
+//                        name,
+//                        number,
+//                        emailList.joinToString(", "),
+//                        profileImageUri = null,
+//                        photo = R.drawable.unclicked_user,
+//                        bookmark = false,
+//                        isNew = false
+//                    )
+//                )
+//            }
+//            cursor.close()
+//        }
+//    }
 }
