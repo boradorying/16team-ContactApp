@@ -5,7 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.contacts.data.Contact
+import com.example.contacts.Contact
+
 import com.example.contacts.R
 import com.example.contacts.databinding.RvGridItemBinding
 import com.example.contacts.databinding.RvItemBinding
