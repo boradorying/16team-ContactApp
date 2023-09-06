@@ -25,10 +25,20 @@ class MyPageFragment : Fragment() {
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit()
+        }
 
+        val bundle = arguments
+        if (bundle != null) {
+            val name = bundle.getString("name")
+            val phone = bundle.getString("phone")
+            val email = bundle.getString("email")
 
+            binding.tvName.text = name
+            binding.tvMobile.text = phone
+            binding.tvEmail.text = email
         }
         return binding.root
     }
+
 }
 

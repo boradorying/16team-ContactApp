@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -22,17 +24,26 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.178">
-
         <ImageView
             android:id="@+id/iv_user"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@drawable/test" />
 
+        <ImageButton
+            android:id="@+id/addPhotoBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp"
+            android:layout_marginLeft="180dp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_user"
+            app:layout_constraintEnd_toEndOf="@+id/iv_user"
+
+
+            app:srcCompat="@drawable/add_photo" />
+
 
     </androidx.cardview.widget.CardView>
-
-
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_name"

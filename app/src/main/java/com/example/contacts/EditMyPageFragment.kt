@@ -11,8 +11,6 @@ import com.example.contacts.databinding.FragmentMyPageBinding
 
 class EditMyPageFragment : Fragment() {
     private lateinit var binding: FragmentEditMyPageBinding
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -20,7 +18,6 @@ class EditMyPageFragment : Fragment() {
         binding = FragmentEditMyPageBinding.inflate(inflater, container, false)
 
         binding.addBtn.setOnClickListener {
-
             val bundle = Bundle()
             bundle.putString("name", binding.tv3.text.toString())
             bundle.putString("phone", binding.tv1.text.toString())
@@ -32,9 +29,14 @@ class EditMyPageFragment : Fragment() {
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.myPageContainer, myPageFragment)
                 .commit()
-
-
         }
+
+
+
+
+
+
+
         return binding.root
     }
 
