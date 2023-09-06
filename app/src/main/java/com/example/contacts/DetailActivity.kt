@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Messenger
+import com.bumptech.glide.Glide
 import com.example.contacts.Util.callPhoneNumber
 import com.example.contacts.Util.messagePhoneNumber
 
@@ -33,11 +34,17 @@ class DetailActivity : AppCompatActivity() {
             tvMobile.text = detailContact.phoneNumber
             tvEmail.text = detailContact.email
             tvName.text = detailContact.name
-            ivUser.setImageResource(detailContact.photo)
+            if (detailContact.isNew) {
+                Glide.with(binding.root.context)
+                    .load(detailContact.profileImageUri)
+                    .into(binding.ivUser)
+            } else {
+                binding.ivUser.setImageResource(detailContact.photo)
+            }
 
-            if (detailContact.bookmark){
+            if (detailContact.bookmark) {
                 binding.bookmark.setBackgroundResource(R.drawable.clicked_bookmark)
-            }else{
+            } else {
                 binding.bookmark.setBackgroundResource(R.drawable.unclicked_bookmark)
             }
 
@@ -46,10 +53,10 @@ class DetailActivity : AppCompatActivity() {
                 detailContact.bookmark = !detailContact.bookmark
 
 
-                if (detailContact.bookmark){
+                if (detailContact.bookmark) {
                     binding.bookmark.setBackgroundResource(R.drawable.clicked_bookmark)
                     showSnackBarMessage("                                      ⭐즐찾⭐")
-                }else{
+                } else {
                     binding.bookmark.setBackgroundResource(R.drawable.unclicked_bookmark)
                     showSnackBarMessage("                                   ⭐즐찾해제⭐")
                 }
@@ -57,7 +64,7 @@ class DetailActivity : AppCompatActivity() {
                 resultIntent.putExtra("BOOKMARK", detailContact.bookmark)
                 resultIntent.putExtra("PHONE", detailContact.phoneNumber)
 
-                setResult(RESULT_OK,resultIntent)
+                setResult(RESULT_OK, resultIntent)
 
             }
 
@@ -74,8 +81,9 @@ class DetailActivity : AppCompatActivity() {
 
         }
     }
-    fun showSnackBarMessage(message: String){
-        val snackbar = Snackbar.make(binding.root,message,Snackbar.LENGTH_SHORT)
+
+    fun showSnackBarMessage(message: String) {
+        val snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT)
         snackbar.show()
     }
 
