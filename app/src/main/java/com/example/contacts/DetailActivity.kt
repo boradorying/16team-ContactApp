@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Messenger
 import com.example.contacts.Util.callPhoneNumber
+import com.example.contacts.Util.messagePhoneNumber
 
 import com.example.contacts.databinding.ActivityDetailBinding
 import com.google.android.material.snackbar.Snackbar
@@ -67,6 +68,10 @@ class DetailActivity : AppCompatActivity() {
             fabCall.setOnClickListener {
                 callPhoneNumber(this@DetailActivity, detailContact.phoneNumber)
             }
+            fabMessage.setOnClickListener {
+                messagePhoneNumber(this@DetailActivity, detailContact.phoneNumber)
+            }
+
         }
     }
     fun showSnackBarMessage(message: String){
