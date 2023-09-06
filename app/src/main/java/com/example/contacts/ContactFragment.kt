@@ -190,7 +190,7 @@ class ContactFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             selectedImageUri = data.data
             if (selectedImageUri != null) {
                 // 이미지를 "profileImage"에 설정
@@ -200,10 +200,10 @@ class ContactFragment : Fragment() {
         else if (requestCode == REQUEST_CODE_DETAIL && resultCode == RESULT_OK) {
 
             val updatedBookmark = data?.getBooleanExtra("BOOKMARK", false)
-
-            if (updatedBookmark != null) {
+            val phonumber = data?.getStringExtra("PHONE")
+            if (updatedBookmark != null && phonumber !=null) {
                 for (contact in contactItems) {//포문을 이용해서 컨택트 아이템의 아이템의 북마크에 접근해서 새로운값으로 초기화
-                    if (contact.bookmark) {
+                    if (contact.phoneNumber == phonumber) {
                         contact.bookmark = updatedBookmark
                     }
                 }
@@ -243,12 +243,37 @@ class ContactFragment : Fragment() {
 
 
     private fun performSearch(query: String) {
+        val chosungQuery =extractConsonant(query)
+
         val filteredList = ContactsManager.contactsList.filter { contact ->//컨택트아이템이 아닌 컨택트 매니저읰 컨택트리스트를 필터
-            contact.name.contains(query, true) // 이름에 검색어가 포함된 경우 검색
+            val chosungName =extractConsonant(contact.name) // 초성변환후 변수 저장
+            chosungName.contains(chosungQuery,true) //초성이름이 초성쿼리에 포함된것 확인함
         }
         contactAdapter.updateContactList(filteredList)
 
     }
+    private fun extractConsonant(input: String): String {
+        val chosungBuilder = StringBuilder()//초성문자열저장하는거코틀린에 있는 클래스
+
+        for (char in input) {
+            val unicode = char.toInt()
+
+            if (unicode in 0xAC00..0xD7A3) {//한글범위하는거
+                val index = (unicode - 0xAC00) / 28 / 21
+                val chosung = arrayOf(
+                    'ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ',
+                    'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'
+                )[index]
+                chosungBuilder.append(chosung)
+            } else {
+
+                chosungBuilder.append(char)
+            }
+        }
+
+        return chosungBuilder.toString()
+    }
+
 
     private fun setButtonBackground() {
         if (isGridMode) {

@@ -54,6 +54,7 @@ class DetailActivity : AppCompatActivity() {
                 }
                 val resultIntent = Intent()
                 resultIntent.putExtra("BOOKMARK", detailContact.bookmark)
+                resultIntent.putExtra("PHONE", detailContact.phoneNumber)
 
                 setResult(RESULT_OK,resultIntent)
 
