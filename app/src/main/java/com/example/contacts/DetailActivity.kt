@@ -8,7 +8,6 @@ import android.os.Messenger
 import com.bumptech.glide.Glide
 import com.example.contacts.Util.callPhoneNumber
 import com.example.contacts.Util.messagePhoneNumber
-
 import com.example.contacts.databinding.ActivityDetailBinding
 import com.google.android.material.snackbar.Snackbar
 
@@ -29,6 +28,7 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         binding.apply {
             tvMobile.text = detailContact.phoneNumber
