@@ -257,7 +257,7 @@ class ContactFragment : Fragment() {
         for (char in input) {
             val unicode = char.toInt()
 
-            if (unicode in 0xAC00..0xD7A3) {//한글범위하는거
+            if (unicode in 0xAC00..0xD7A3) {//한글범위하는거입니다.
                 val index = (unicode - 0xAC00) / 28 / 21
                 val chosung = arrayOf(
                     'ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ',
