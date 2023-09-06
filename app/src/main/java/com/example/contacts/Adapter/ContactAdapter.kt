@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.contacts.Contact
 import com.example.contacts.R
 import com.example.contacts.databinding.RvGridItemBinding
@@ -86,7 +87,15 @@ class ContactAdapter(
         }
 
         fun bindItems(item: Contact) {
-            binding.imageArea.setImageResource(item.photo)
+
+            if (item.isNew){
+                Glide.with(binding.root.context)
+                    .load(item.profileImageUri)
+                    .into(binding.imageArea)
+            }
+            else{
+                binding.imageArea.setImageResource(item.photo)
+            }
             binding.nameArea.text = item.name
 
             if (item.bookmark) {
@@ -103,7 +112,14 @@ class ContactAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bindItems(item: Contact) {
-            binding.imageArea.setImageResource(item.photo)
+            if (item.isNew){
+                Glide.with(binding.root.context)
+                    .load(item.profileImageUri)
+                    .into(binding.imageArea)
+            }
+            else{
+                binding.imageArea.setImageResource(item.photo)
+            }
             binding.nameArea.text = item.name
         }
     }

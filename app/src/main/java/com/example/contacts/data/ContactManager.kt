@@ -1,7 +1,6 @@
 package com.example.contacts
 
 
-
 object ContactsManager {
     val contactsList = mutableListOf<Contact>()
 
