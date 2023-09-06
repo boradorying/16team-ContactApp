@@ -305,7 +305,7 @@ class ContactFragment : Fragment() {
                 //val emailIndex = cursor.getColumnIndex(projection[3])
                 val name = cursor.getString(nameIndex)
                 val number = cursor.getString(numberIndex)
-               // val email = cursor.getString(emailIndex)
+                // val email = cursor.getString(emailIndex)
 
                 // 연락처 정보를 어댑터에 추가
 //                contactAdapter.addContact(
