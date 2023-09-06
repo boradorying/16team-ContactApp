@@ -29,6 +29,7 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         binding.apply {
             tvMobile.text = detailContact.phoneNumber
             tvEmail.text = detailContact.email
