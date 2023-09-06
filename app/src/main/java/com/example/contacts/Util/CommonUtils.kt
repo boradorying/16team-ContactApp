@@ -27,3 +27,11 @@ fun callPhoneNumber(activity : Activity, phoneNumber: String) {
     }
     activity.startActivity(callIntent)
 }
+
+fun messagePhoneNumber(activity: Activity, phoneNumber: String){
+    val smsUri = Uri.parse("smsto:$phoneNumber") // 문자를 전송할 phoneNumber
+    val intent = Intent(Intent.ACTION_SENDTO)
+    intent.data = smsUri
+    intent.putExtra("sms_body", "") // body에 전송할 내용
+    activity.startActivity(intent)
+}
