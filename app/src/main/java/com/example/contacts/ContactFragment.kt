@@ -40,6 +40,9 @@ class ContactFragment : Fragment() {
     private lateinit var profileImage: CircleImageView
     private var selectedImageUri: Uri? = null
 
+    // swipe x값
+    private var swipeDx = 0f
+    private var swipePosition = -1
     companion object {
         const val REQUEST_PHONE_CALL = 1
         const val REQUEST_CODE_DETAIL = -1
@@ -62,6 +65,12 @@ class ContactFragment : Fragment() {
             callPhoneNumber(requireActivity(), contactItems[position].phoneNumber)
             // 스와이프 후 사라진 아이템 복구
             contactAdapter.notifyItemChanged(position)
+        }.apply {
+            onSwipeListener = { dX, viewHolder ->
+                swipeDx = dX
+                swipePosition = viewHolder.adapterPosition
+                binding.RVArea.invalidateItemDecorations()
+            }
         }
 
         val itemTouchHelper = ItemTouchHelper(touchHelperCallback)
