@@ -62,7 +62,7 @@ class ContactFragment : Fragment() {
         // ItemTouchHelper 추가
         val touchHelperCallback = ItemTouchHelperCallback(0, ItemTouchHelper.RIGHT) { position ->
             callPhoneNumber(requireActivity(), contactItems[position].phoneNumber)
-            // 스와이프 후 사라진 아이템 복구
+            // 스와이프 후 다시 아이템을 그려줌
             contactAdapter.notifyItemChanged(position)
         }.apply {
             onSwipeListener = { dX, viewHolder ->

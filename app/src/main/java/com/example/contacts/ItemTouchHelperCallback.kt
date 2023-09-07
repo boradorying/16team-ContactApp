@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 class ItemTouchHelperCallback(
     dragDirs: Int,
     swipeDirs: Int,
-    private val onSwiped: (Int) -> Unit
+    private val onSwiped: (Int) -> Unit,
 ) : ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
 
     var onSwipeListener: ((Float, RecyclerView.ViewHolder) -> Unit)? = null
