@@ -2,18 +2,17 @@ package com.example.contacts
 
 
 import android.Manifest
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
+import android.content.ContentResolver
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
-import android.app.Activity.RESULT_OK
-import android.content.ContentResolver
-import android.content.pm.PackageManager
 import android.provider.ContactsContract
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,16 +20,19 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.contacts.Adapter.ContactAdapter
 import com.example.contacts.Util.callPhoneNumber
 import com.example.contacts.databinding.FragmentContactBinding
-import com.google.android.material.snackbar.Snackbar
 import de.hdodenhof.circleimageview.CircleImageView
+
+
 class ContactFragment : Fragment() {
     private lateinit var binding: FragmentContactBinding
     private lateinit var contactAdapter: ContactAdapter
@@ -58,7 +60,21 @@ class ContactFragment : Fragment() {
         contactAdapter = ContactAdapter(contactItems, isGridMode)
         binding.RVArea.adapter = contactAdapter
         setLayoutManager() // 초기 레이아웃 매니저 설정
-        requirePermission()//연락처 받아오기
+        //requirePermission()//권한 받아
+
+
+        // 권한 체크 및 요청
+        val readContactsPermission = Manifest.permission.READ_CONTACTS
+
+        // 권한이 이미 허용되었는지 확인
+        if (ContextCompat.checkSelfPermission(requireContext(), readContactsPermission) == PackageManager.PERMISSION_GRANTED) {
+            // 권한이 이미 허용된 경우 실행할 코드
+            getContact()
+        } else {
+            // 권한을 요청
+            requestPermission()
+        }
+
 
         // ItemTouchHelper 추가
         val touchHelperCallback = ItemTouchHelperCallback(0, ItemTouchHelper.RIGHT) { position ->
@@ -263,7 +279,6 @@ class ContactFragment : Fragment() {
         return chosungBuilder.toString()
     }
 
-
     private fun setButtonBackground() {
         if (isGridMode) {
             binding.gridBtn.setBackgroundResource(R.drawable.clicked_grid)
@@ -274,35 +289,24 @@ class ContactFragment : Fragment() {
         }
     }
 
-
-    //실제 연락처 가져오기
-    private fun requirePermission() { // 허가
-        val permissions = arrayOf(android.Manifest.permission.READ_CONTACTS)
-        val permissionCheck = ContextCompat.checkSelfPermission((activity as MainActivity), Manifest.permission.READ_CONTACTS)
-        if (permissionCheck == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions((activity as MainActivity), permissions, 0)
-            Toast.makeText(context,"권한이 거부되었습니다.",Toast.LENGTH_SHORT).show()
-
-        }
-        else if(permissionCheck == PackageManager.PERMISSION_GRANTED){
+    private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            Toast.makeText(context,"권한 허용",Toast.LENGTH_SHORT).show()
             getContact()
-            Toast.makeText(context,"연락처가 연동되었습니다.",Toast.LENGTH_SHORT).show()
+            contactAdapter.notifyDataSetChanged()
+        } else {
+            Toast.makeText(context,"권한을 거부",Toast.LENGTH_SHORT).show()
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 0) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(context,"연락처가 연동되었습니다.",Toast.LENGTH_SHORT).show()
-                getContact()
-            } else {
-                Toast.makeText(context,"권한이 거부되었습니다.",Toast.LENGTH_SHORT).show()
-
-            }
+    private fun requestPermission() {
+        val readContactsPermission = Manifest.permission.READ_CONTACTS
+        if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), readContactsPermission)) {
+            getContact() //true
+        } else { // false
+            permissionLauncher.launch(readContactsPermission)
         }
     }
-
     private fun getContact() {
         val resolver: ContentResolver = (activity as MainActivity).contentResolver
         val phoneUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
@@ -311,7 +315,6 @@ class ContactFragment : Fragment() {
             ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
             ContactsContract.CommonDataKinds.Phone.NUMBER
         )
-
         val cursor = resolver.query(phoneUri, projection, null, null, null)
         if (cursor != null) {
             while (cursor.moveToNext()) {
@@ -320,6 +323,7 @@ class ContactFragment : Fragment() {
                 val name = cursor.getString(nameIndex)
                 val number = cursor.getString(numberIndex)
 
+                Toast.makeText(context,"데이터 받아옴 ${name}",Toast.LENGTH_SHORT).show()
                 ContactsManager.contactsList.add(
                     Contact(
                         name,
@@ -332,7 +336,11 @@ class ContactFragment : Fragment() {
                     )
                 )
             }
+            ContactsManager.contactsList.sortBy { it.name }
+            contactItems.clear()
+            contactItems.addAll(ContactsManager.contactsList)
             cursor.close()
         }
     }
+
 }
