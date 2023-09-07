@@ -3,6 +3,7 @@ package com.example.contacts
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +13,9 @@ class ItemTouchHelperCallback(
     swipeDirs: Int,
     private val onSwiped: (Int) -> Unit
 ) : ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
+
+    var onSwipeListener: ((Float, RecyclerView.ViewHolder) -> Unit)? = null
+    var onSwipe: ((Float, Int) -> Unit)? = null
 
     override fun onMove(
         recyclerView: RecyclerView,
@@ -32,26 +36,19 @@ class ItemTouchHelperCallback(
         actionState: Int,
         isCurrentlyActive: Boolean
     ) {
-        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
 
         val itemView = viewHolder.itemView
+        val background = itemView.findViewById<View>(R.id.swipeBackground)
+        val layoutParams = background.layoutParams
 
-        // 스와이프 색상 지정
-        val color = ContextCompat.getColor(itemView.context, R.color.light_main)
-
-        // 스와이프 중에만 아이템의 일부에 배경색을 그려주는 코드
-        if (dX > 0) { // 오른쪽으로 스와이프하는 경우
-            val paint = Paint()
-            paint.color = color
-
-            val background = RectF(
-                itemView.left.toFloat(),
-                itemView.top.toFloat(),
-                itemView.left + dX,
-                itemView.bottom.toFloat()
-            )
-
-            c.drawRect(background, paint)
+        // 스와이프 네모 뷰 그림
+        layoutParams?.apply {
+            width = if (dX > 0) {
+                dX.toInt()
+            } else {
+                0
+            }
+            background.layoutParams = this
         }
     }
 }
