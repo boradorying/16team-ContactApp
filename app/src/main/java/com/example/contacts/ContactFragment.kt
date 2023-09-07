@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.contacts.Adapter.ContactAdapter
 import com.example.contacts.Util.callPhoneNumber
 import com.example.contacts.databinding.FragmentContactBinding
+import com.google.android.material.snackbar.Snackbar
 import de.hdodenhof.circleimageview.CircleImageView
 class ContactFragment : Fragment() {
     private lateinit var binding: FragmentContactBinding
@@ -271,9 +272,12 @@ class ContactFragment : Fragment() {
         val permissionCheck = ContextCompat.checkSelfPermission((activity as MainActivity), Manifest.permission.READ_CONTACTS)
         if (permissionCheck == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions((activity as MainActivity), permissions, 0)
+            Toast.makeText(context,"권한이 거부되었습니다.",Toast.LENGTH_SHORT).show()
+
         }
         else if(permissionCheck == PackageManager.PERMISSION_GRANTED){
             getContact()
+            Toast.makeText(context,"연락처가 연동되었습니다.",Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -281,9 +285,11 @@ class ContactFragment : Fragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 0) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(context,"연락처가 연동되었습니다.",Toast.LENGTH_SHORT).show()
                 getContact()
             } else {
-                // 권한이 거부되었을 때 처리
+                Toast.makeText(context,"권한이 거부되었습니다.",Toast.LENGTH_SHORT).show()
+
             }
         }
     }
@@ -302,28 +308,14 @@ class ContactFragment : Fragment() {
             while (cursor.moveToNext()) {
                 val nameIndex = cursor.getColumnIndex(projection[1])
                 val numberIndex = cursor.getColumnIndex(projection[2])
-                //val emailIndex = cursor.getColumnIndex(projection[3])
                 val name = cursor.getString(nameIndex)
                 val number = cursor.getString(numberIndex)
-                // val email = cursor.getString(emailIndex)
 
-                // 연락처 정보를 어댑터에 추가
-//                contactAdapter.addContact(
-//                    Contact(
-//                        name,
-//                        number,
-//                        "22",
-//                        profileImageUri = null,
-//                        photo = R.drawable.unclicked_user,
-//                        bookmark = false,
-//                        isNew = false
-//                    )
-//                )
                 ContactsManager.contactsList.add(
                     Contact(
                         name,
                         number,
-                        "22",
+                        null,
                         profileImageUri = null,
                         photo = R.drawable.unclicked_user,
                         bookmark = false,
@@ -334,64 +326,4 @@ class ContactFragment : Fragment() {
             cursor.close()
         }
     }
-//    private fun getContact() {
-//        val resolver: ContentResolver = (activity as MainActivity).contentResolver
-//        val phoneUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
-//        val projection = arrayOf(
-//            ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
-//            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-//            ContactsContract.CommonDataKinds.Phone.NUMBER,
-//        )
-//        val cursor = resolver.query(phoneUri, projection, null, null, null)
-//        if (cursor != null) {
-//            while (cursor.moveToNext()) {
-//                val contactId = cursor.getColumnIndex(projection[0])
-//                val nameIndex = cursor.getColumnIndex(projection[1])
-//                val numberIndex = cursor.getColumnIndex(projection[2])
-//                val emailIndex = cursor.getColumnIndex(projection[3])
-//                val name = cursor.getString(nameIndex)
-//                val number = cursor.getString(numberIndex)
-//                val email = cursor.getString(emailIndex)
-//
-//                // 이메일 주소 가져오기
-//                val emailProjection = arrayOf(
-//                    ContactsContract.CommonDataKinds.Email.DATA
-//                )
-//                val emailCursor = resolver.query(
-//                    ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-//                    emailProjection,
-//                    ContactsContract.CommonDataKinds.Email.CONTACT_ID + "=?",
-//                    arrayOf(contactId.toString()),
-//                    null
-//                )
-//
-//                val emailList = mutableListOf<String>()
-//
-//                if (emailCursor != null) {
-//                    val emailDataIndex = emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA)
-//
-//                    while (emailCursor.moveToNext()) {
-//                        val email = emailCursor.getString(emailDataIndex)
-//                        emailList.add(email)
-//                    }
-//                    emailCursor.close()
-//                }
-//
-//
-//                // 연락처 정보를 어댑터에 추가
-//                contactAdapter.addContact(
-//                    Contact(
-//                        name,
-//                        number,
-//                        emailList.joinToString(", "),
-//                        profileImageUri = null,
-//                        photo = R.drawable.unclicked_user,
-//                        bookmark = false,
-//                        isNew = false
-//                    )
-//                )
-//            }
-//            cursor.close()
-//        }
-//    }
 }
