@@ -66,7 +66,7 @@ class ContactFragment : Fragment() {
         //requirePermission()//권한 받아
 
 
-        // 권한 체크 및 요청
+        // 권한 체크
         val readContactsPermission = Manifest.permission.READ_CONTACTS
 
         // 권한이 이미 허용되었는지 확인
@@ -125,8 +125,6 @@ class ContactFragment : Fragment() {
             showAddContactDialog()
         }
 
-        // contactItems.clear() //주석풀면 연락처 안받아와집니다!
-        contactItems.addAll(ContactsManager.contactsList)
 
         binding.searchEdit.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -316,6 +314,7 @@ class ContactFragment : Fragment() {
         }
     }
     private fun getContact() {
+        Toast.makeText(context,"연락처를 성공적으로 불러왔습니다!",Toast.LENGTH_SHORT).show()
         val resolver: ContentResolver = (activity as MainActivity).contentResolver
         val phoneUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
         val projection = arrayOf(
@@ -331,7 +330,7 @@ class ContactFragment : Fragment() {
                 val name = cursor.getString(nameIndex)
                 val number = cursor.getString(numberIndex)
 
-                Toast.makeText(context,"데이터 받아옴 ${name}",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,"add data : ${name}",Toast.LENGTH_SHORT).show() //최종적으로 삭제 예정
                 ContactsManager.contactsList.add(
                     Contact(
                         name,
@@ -345,7 +344,6 @@ class ContactFragment : Fragment() {
                 )
             }
             ContactsManager.contactsList.sortBy { it.name }
-            contactItems.clear()
             contactItems.addAll(ContactsManager.contactsList)
             cursor.close()
         }
