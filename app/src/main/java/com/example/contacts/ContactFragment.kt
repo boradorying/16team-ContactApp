@@ -22,12 +22,15 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.contacts.Adapter.ContactAdapter
+import com.example.contacts.ContactFragment.Companion.REQUEST_CODE_DETAIL
 import com.example.contacts.Util.callPhoneNumber
 import com.example.contacts.databinding.FragmentContactBinding
 import de.hdodenhof.circleimageview.CircleImageView
@@ -77,11 +80,16 @@ class ContactFragment : Fragment() {
 
 
         // ItemTouchHelper 추가
-        val touchHelperCallback = ItemTouchHelperCallback(0, ItemTouchHelper.RIGHT) { position ->
-            callPhoneNumber(requireActivity(), contactItems[position].phoneNumber)
-            // 스와이프 후 사라진 아이템 복구
-            contactAdapter.notifyItemChanged(position)
-        }.apply {
+        val swipeDirection = if (isGridMode) 0 else ItemTouchHelper.RIGHT
+        val touchHelperCallback = ItemTouchHelperCallback(
+            0,
+            if (isGridMode) 0 else ItemTouchHelper.RIGHT,
+            { position ->
+                callPhoneNumber(requireActivity(), contactItems[position].phoneNumber)
+                contactAdapter.notifyItemChanged(position)
+            },
+            isGridMode
+        ).apply {
             onSwipeListener = { dX, viewHolder ->
                 swipeDx = dX
                 swipePosition = viewHolder.adapterPosition
