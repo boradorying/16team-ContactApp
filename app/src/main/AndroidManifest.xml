@@ -6,6 +6,16 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <uses-feature android:name="android.hardware.telephony" android:required="false" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+
+
+
+
+
 
     <application
         android:usesCleartextTraffic="true"
@@ -18,9 +28,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Contacts"
         tools:targetApi="31">
+
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".DetailActivity"
             android:exported="false" />
@@ -33,12 +49,16 @@
         <activity
             android:name=".SplashActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".Notification.NotificationReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.contacts.NOTIFICATION_ACTION" />
+            </intent-filter>
+        </receiver>
     </application>
+
 
 </manifest>

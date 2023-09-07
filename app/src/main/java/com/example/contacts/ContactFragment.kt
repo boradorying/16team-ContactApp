@@ -22,15 +22,13 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.startActivityForResult
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.contacts.Adapter.ContactAdapter
-import com.example.contacts.ContactFragment.Companion.REQUEST_CODE_DETAIL
+import com.example.contacts.Notification.NotificationHelper
 import com.example.contacts.Util.callPhoneNumber
 import com.example.contacts.databinding.FragmentContactBinding
 import de.hdodenhof.circleimageview.CircleImageView
@@ -44,7 +42,7 @@ class ContactFragment : Fragment() {
     private val PICK_IMAGE_REQUEST_CODE = 100
     private lateinit var profileImage: CircleImageView
     private var selectedImageUri: Uri? = null
-
+    private var isClicked = false
     // swipe x값
     private var swipeDx = 0f
     private var swipePosition = -1
@@ -150,8 +148,61 @@ class ContactFragment : Fragment() {
         val nameEdit = dialogView.findViewById<EditText>(R.id.nameEdit)
         val numberEdit = dialogView.findViewById<EditText>(R.id.numberEdit)
         val emailEdit = dialogView.findViewById<EditText>(R.id.eMailEdit)
-        val eventEdit = dialogView.findViewById<EditText>(R.id.eventEdit)
         val addPhotoBtn = dialogView.findViewById<ImageButton>(R.id.addPhotoBtn)
+
+        val eventOff = dialogView.findViewById<Button>(R.id.eventBtn1)
+        val event5s = dialogView.findViewById<Button>(R.id.eventBtn2)
+        val event1m = dialogView.findViewById<Button>(R.id.eventBtn3)
+
+
+
+        eventOff.setOnClickListener {
+            isClicked = !isClicked
+
+            eventOff.setBackgroundResource(if (isClicked) R.color.light_main else R.color.beige)
+            event5s.setBackgroundResource(R.color.beige)
+            event1m.setBackgroundResource(R.color.beige)
+
+            val notificationHelper = NotificationHelper(requireContext())
+            if (isClicked) {
+
+                notificationHelper.cancelNotification()
+            }
+
+        }
+
+
+        event5s.setOnClickListener {
+            isClicked = !isClicked
+
+            // 버튼 배경색 변경
+            eventOff.setBackgroundResource(R.color.beige)
+            event5s.setBackgroundResource(if (isClicked) R.color.light_main else R.color.beige)
+            event1m.setBackgroundResource(R.color.beige)
+
+            val notificationHelper = NotificationHelper(requireContext())
+            if (isClicked) {
+                notificationHelper.scheduleNotification(true)
+            } else {
+                notificationHelper.cancelNotification()
+            }
+        }
+
+        event1m.setOnClickListener {
+            isClicked = !isClicked
+
+            eventOff.setBackgroundResource(R.color.beige)
+            event5s.setBackgroundResource(R.color.beige)
+            event1m.setBackgroundResource(if (isClicked) R.color.light_main else R.color.beige)
+
+            val notificationHelper = NotificationHelper(requireContext())
+            if (isClicked) {
+                notificationHelper.scheduleNotification(false)
+            } else {
+                notificationHelper.cancelNotification()
+            }
+        }
+
 
         // addPhotoBtn 클릭 이벤트 설정
         addPhotoBtn.setOnClickListener {
@@ -165,10 +216,11 @@ class ContactFragment : Fragment() {
             val name = nameEdit.text.toString()
             val phoneNumber = numberEdit.text.toString()
             val email = emailEdit.text.toString()
-            val event = eventEdit.text.toString()
+
+
 
             // 필수 정보가 입력되었는지 확인
-            if (name.isNotEmpty() && phoneNumber.isNotEmpty() && email.isNotEmpty() && event.isNotEmpty()) {
+            if (name.isNotEmpty() && phoneNumber.isNotEmpty() && email.isNotEmpty()) {
                 // Contact로 사용자 입력 정보 전달
                 var isNewBoolean = true
                 if(selectedImageUri == null)
@@ -183,7 +235,8 @@ class ContactFragment : Fragment() {
                     selectedImageUri,
                     R.drawable.un_selsected_image,
                     false,
-                    isNewBoolean
+                    isNewBoolean,
+                    false
                 )
                 selectedImageUri =null
                 ContactsManager.contactsList.add(newContact)
@@ -339,7 +392,8 @@ class ContactFragment : Fragment() {
                         profileImageUri = null,
                         photo = R.drawable.unclicked_user,
                         bookmark = false,
-                        isNew = false
+                        isNew = false,
+                                isCilked =false
                     )
                 )
             }
