@@ -8,7 +8,7 @@ import kotlinx.android.parcel.Parcelize
 data class Contact(
     val name: String,
     val phoneNumber: String,
-    val email: String,
+    val email: String?,
     val profileImageUri: Uri?,
     var photo: Int,
     var bookmark: Boolean,
