@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.example.contacts.Contact
 import com.example.contacts.R
@@ -62,6 +63,7 @@ class ContactAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        initItemViewHolder(holder)
         when (holder.itemViewType) {
             VIEW_TYPE_LIST -> {
                 val normalViewHolder = holder as ListViewHolder
@@ -78,6 +80,17 @@ class ContactAdapter(
             productClick?.onClick(it, position)
         }
         // itemClick(ms)
+    }
+
+    private fun initItemViewHolder(holder: ViewHolder) {
+       val background = holder.itemView.findViewById<View>(R.id.swipeBackground)
+        val layoutParams = background?.layoutParams
+
+        // 스와이프 네모 뷰 그림 초기화
+        layoutParams?.apply {
+            width = 0
+            background.layoutParams = this
+        }
     }
 
     inner class ListViewHolder(private val binding: RvItemBinding) :
