@@ -68,55 +68,91 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:ems="10"
-            android:inputType="textEmailAddress"
-            android:hint="이메일"
-            android:textStyle="bold"
             android:fontFamily="@font/komi"
+            android:hint="이메일"
+            android:inputType="textEmailAddress"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/numberEdit" />
 
-        <EditText
-            android:id="@+id/eventEdit"
+
+
+        <Button
+            android:id="@+id/eventBtn1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:ems="10"
-            android:inputType="text"
-            android:hint="이벤트"
-            android:textStyle="bold"
+            android:background="@color/beige"
             android:fontFamily="@font/komi"
+            android:text="OFF"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.179"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/eMailEdit" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.786" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
+            android:id="@+id/eventBtn2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="332dp"
+            android:background="@color/beige"
+            android:fontFamily="@font/komi"
+            android:text="5초"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/eventBtn3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/beige"
+            android:fontFamily="@font/komi"
+            android:text="10초"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.823"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.786" />
+
+        <Button
             android:id="@+id/cancelBt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="취소"
+            android:layout_marginTop="16dp"
             android:background="@drawable/dialog_bt"
-            android:textStyle="bold"
             android:fontFamily="@font/komi"
-            app:layout_constraintEnd_toStartOf="@+id/saveBt"
-            app:layout_constraintHorizontal_bias="0.5"
+            android:text="취소"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.226"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/eventEdit" />
 
-        <androidx.appcompat.widget.AppCompatButton
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
             android:id="@+id/saveBt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/dialog_bt"
+            android:fontFamily="@font/komi"
             android:text="저장"
             android:textStyle="bold"
-            android:fontFamily="@font/komi"
-            android:background="@drawable/dialog_bt"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.546"
             app:layout_constraintStart_toEndOf="@+id/cancelBt"
-            app:layout_constraintTop_toBottomOf="@+id/eventEdit" />
+
+            app:layout_constraintVertical_bias="0.0" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
