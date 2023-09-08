@@ -5,7 +5,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Messenger
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.example.contacts.Adapter.ContactAdapter
 import com.example.contacts.Util.callPhoneNumber
 import com.example.contacts.Util.messagePhoneNumber
 import com.example.contacts.databinding.ActivityDetailBinding
@@ -13,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
+
 
     companion object {
         private lateinit var detailContact: Contact
@@ -55,16 +61,17 @@ class DetailActivity : AppCompatActivity() {
 
                 if (detailContact.bookmark) {
                     binding.bookmark.setBackgroundResource(R.drawable.clicked_bookmark)
-                    showSnackBarMessage("                                      ⭐즐찾⭐")
+                    showSnackBarMessage("⭐즐찾⭐")
                 } else {
                     binding.bookmark.setBackgroundResource(R.drawable.unclicked_bookmark)
-                    showSnackBarMessage("                                   ⭐즐찾해제⭐")
+                    showSnackBarMessage("⭐즐찾해제⭐")
                 }
                 val resultIntent = Intent()
                 resultIntent.putExtra("BOOKMARK", detailContact.bookmark)
                 resultIntent.putExtra("PHONE", detailContact.phoneNumber)
 
                 setResult(RESULT_OK, resultIntent)
+
 
             }
 
@@ -83,8 +90,12 @@ class DetailActivity : AppCompatActivity() {
     }
 
     fun showSnackBarMessage(message: String) {
-        val snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT)
+       val snackbar =Snackbar.make(binding.root,message,Snackbar.LENGTH_SHORT)
+        val snackbarText =snackbar.view.findViewById(com.google.android.material.R.id.snackbar_text)as TextView
+
+        snackbarText.textAlignment = View.TEXT_ALIGNMENT_CENTER
         snackbar.show()
+
     }
 
 }
