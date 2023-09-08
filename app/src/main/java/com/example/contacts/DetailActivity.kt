@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Messenger
 import com.bumptech.glide.Glide
+import com.example.contacts.Adapter.ContactAdapter
 import com.example.contacts.Util.callPhoneNumber
 import com.example.contacts.Util.messagePhoneNumber
 import com.example.contacts.databinding.ActivityDetailBinding
@@ -13,6 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
+
 
     companion object {
         private lateinit var detailContact: Contact
@@ -66,6 +68,7 @@ class DetailActivity : AppCompatActivity() {
 
                 setResult(RESULT_OK, resultIntent)
 
+
             }
 
             btnCancel.setOnClickListener {
@@ -85,6 +88,7 @@ class DetailActivity : AppCompatActivity() {
     fun showSnackBarMessage(message: String) {
         val snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT)
         snackbar.show()
+
     }
 
 }
