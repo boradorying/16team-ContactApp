@@ -7,14 +7,12 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Messenger
 import android.provider.MediaStore
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.bumptech.glide.Glide
 import com.example.contacts.Util.callPhoneNumber
 import com.example.contacts.Util.messagePhoneNumber
@@ -29,11 +27,15 @@ class DetailActivity : AppCompatActivity() {
 
     companion object {
         private lateinit var detailContact: Contact
+        private var contactPosition = 0
 
-        fun newIntentForDetail(context: Context?, contact: Contact) =
+        val CONTACT_POSITION = "contact_position"
+        val CONTACT_ITEM = "contact_item"
+
+        fun newIntentForDetail(context: Context?, contact: Contact, position: Int) =
             Intent(context, DetailActivity::class.java).apply {
                 detailContact = contact
-
+                contactPosition = position
             }
     }
 
@@ -73,15 +75,28 @@ class DetailActivity : AppCompatActivity() {
                     binding.bookmark.setBackgroundResource(R.drawable.unclicked_bookmark)
                     showSnackBarMessage("                                   ⭐즐찾해제⭐")
                 }
-                val resultIntent = Intent()
-                resultIntent.putExtra("BOOKMARK", detailContact.bookmark)
-                resultIntent.putExtra("PHONE", detailContact.phoneNumber)
-
-                setResult(RESULT_OK, resultIntent)
+//                val resultIntent = Intent()
+//                resultIntent.putExtra("BOOKMARK", detailContact.bookmark)
+//                resultIntent.putExtra("PHONE", detailContact.phoneNumber)
+//
+//                setResult(RESULT_OK, resultIntent)
 
             }
+            // 뒤로가기 실행 시 데이터 넘겨줌
+            btnBackPressed.setOnClickListener {
+                detailContact.name = tvName.text.toString()
+                detailContact.phoneNumber = tvMobile.text.toString()
+                detailContact.email = tvEmail.text.toString()
+                detailContact.profileImageUri = selectedImageUri
+                detailContact.isNew = true
 
-            btnCancel.setOnClickListener {
+                val resultIntent = Intent()
+//                resultIntent.putExtra("BOOKMARK", detailContact.bookmark)
+//                resultIntent.putExtra("PHONE", detailContact.phoneNumber)
+                resultIntent.putExtra(CONTACT_ITEM, detailContact) // 객체 콜백으로 전송
+                resultIntent.putExtra(CONTACT_POSITION, contactPosition) // 수정에 필요한 position
+                setResult(RESULT_OK, resultIntent)
+
                 finish()
             }
 
@@ -149,6 +164,7 @@ class DetailActivity : AppCompatActivity() {
 
         if (requestCode == EDIT_IMAGE_REQUEST_CODE_DETAIL && resultCode == Activity.RESULT_OK && data != null) {
             selectedImageUri = data.data
+            detailContact.isNew = true
             try {
                 editImage.setImageURI(selectedImageUri)
             } catch (e: Exception) {

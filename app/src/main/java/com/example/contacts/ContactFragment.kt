@@ -2,6 +2,7 @@ package com.example.contacts
 
 
 import android.Manifest
+import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.ContentResolver
@@ -101,7 +102,7 @@ class ContactFragment : Fragment() {
         contactAdapter.productClick = object : ContactAdapter.ProductClick {
             override fun onClick(view: View, position: Int) {
                 val detailIntent = DetailActivity.newIntentForDetail(
-                    context, contactItems[position]
+                    context, contactItems[position],position
                 )
                 startActivityForResult(detailIntent, REQUEST_CODE_DETAIL)
             }
@@ -271,19 +272,28 @@ class ContactFragment : Fragment() {
         }
         else if (requestCode == REQUEST_CODE_DETAIL && resultCode == RESULT_OK) {
 
-            val updatedBookmark = data?.getBooleanExtra("BOOKMARK", false)
-            val phonumber = data?.getStringExtra("PHONE")
-            if (updatedBookmark != null && phonumber !=null) {
-                for (contact in contactItems) {//포문을 이용해서 컨택트 아이템의 아이템의 북마크에 접근해서 새로운값으로 초기화
-                    if (contact.phoneNumber == phonumber) {
-                        contact.bookmark = updatedBookmark
-                    }
-                }
+//            val updatedBookmark = data?.getBooleanExtra("BOOKMARK", false)
+//            val phonumber = data?.getStringExtra("PHONE")
+            val resultContact = data?.getParcelableExtra<Contact>(DetailActivity.CONTACT_ITEM)// 객체를 받아옴
+            val resultPosition = data?.getIntExtra(DetailActivity.CONTACT_POSITION,0)//position을 받아와줌
+            if (resultContact?.bookmark != null && resultPosition != null) {
+                contactItems[resultPosition].name = resultContact.name
+                contactItems[resultPosition].email = resultContact.email
+                contactItems[resultPosition].phoneNumber = resultContact.phoneNumber
+                contactItems[resultPosition].bookmark = resultContact.bookmark
+                contactItems[resultPosition].profileImageUri = resultContact.profileImageUri
+                contactItems[resultPosition].isNew = resultContact.isNew
+//                for (contact in contactItems) {//포문을 이용해서 컨택트 아이템의 아이템의 북마크에 접근해서 새로운값으로 초기화
+//                    if (contact.phoneNumber == resultContact.phoneNumber) {
+//                        contact.bookmark = resultContact.bookmark
+//                        contact.name = resultContact.name
+//                        contact.name = resultContact.name
+//                    }
+//                }
                 contactAdapter.notifyDataSetChanged()
             }
         }
     }
-
     private fun setLayoutManager() {
         if (isGridMode) {
             val layoutManager = GridLayoutManager(requireContext(), 3)
@@ -299,7 +309,7 @@ class ContactFragment : Fragment() {
             override fun onClick(view: View, position: Int) {
                 startActivity(
                     DetailActivity.newIntentForDetail(
-                        context, contactItems[position]
+                        context, contactItems[position],position
                     )
                 )
             }
