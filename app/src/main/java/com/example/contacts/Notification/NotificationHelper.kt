@@ -45,18 +45,18 @@ class NotificationHelper(private val context: Context) {
     }
 
     // 알람 예약
-    fun scheduleNotification(is5Seconds: Boolean = true) {
+    fun scheduleNotification(is5Seconds: Boolean = true,name:String) {
         notificationJob =
             CoroutineScope(Dispatchers.Default).launch {//코루틴 스코프! 메인쓰레ㅐ드와 상관없이 새로운쓰레ㅐ드를 생성해서 실행을 시킨다,생명주기가 넓은 스코프
                 // test 5초
 
                 delay(if (is5Seconds) 5000 else 8000)//기다려
                 Log.d("jun", "delay :$isActive")
-                showNotification()
+                showNotification(name)
             }
     }
 
-    fun showNotification() {
+    fun showNotification(name: String) {
         val notificationIntent = Intent(context, NotificationReceiver::class.java)
         notificationIntent.action = "com.example.contacts.NOTIFICATION_ACTION"
 
@@ -76,7 +76,7 @@ class NotificationHelper(private val context: Context) {
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.baseline_add_ic_call_24)
             .setContentTitle("새로운 연락처 등록 알람입니다")
-            .setContentText("5분뒤 전화거세요")
+            .setContentText("5분뒤 $name 전화거세요")
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)

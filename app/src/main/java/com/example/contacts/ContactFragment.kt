@@ -155,48 +155,7 @@ class ContactFragment : Fragment() {
         val event5s = dialogView.findViewById<Button>(R.id.eventBtn2)
         val event1m = dialogView.findViewById<Button>(R.id.eventBtn3)
 
-        eventOff.setOnClickListener {
-            isClicked = !isClicked//true
-            eventOff.setBackgroundResource(if (isClicked) R.color.light_main else R.color.beige)//true니깐 ㄱㄱ
-            event5s.setBackgroundResource(R.color.beige)
-            event1m.setBackgroundResource(R.color.beige)
 
-            if (isClicked) {
-
-                notificationHelper.cancelNotification()
-            }
-
-        }
-
-        event5s.setOnClickListener {
-            isClicked = !isClicked
-
-            // 버튼 배경색 변경
-            eventOff.setBackgroundResource(R.color.beige)
-            event5s.setBackgroundResource(if (isClicked) R.color.light_main else R.color.beige)
-            event1m.setBackgroundResource(R.color.beige)
-
-
-            if (isClicked) {
-                notificationHelper.scheduleNotification(true)
-            } else {
-                notificationHelper.cancelNotification()
-            }
-        }
-
-        event1m.setOnClickListener {
-            isClicked = !isClicked
-
-            eventOff.setBackgroundResource(R.color.beige)
-            event5s.setBackgroundResource(R.color.beige)
-            event1m.setBackgroundResource(if (isClicked) R.color.light_main else R.color.beige)
-
-            if (isClicked) {
-                notificationHelper.scheduleNotification(false)
-            } else {
-                notificationHelper.cancelNotification()
-            }
-        }
 
         // addPhotoBtn 클릭 이벤트 설정
         addPhotoBtn.setOnClickListener {
@@ -242,6 +201,46 @@ class ContactFragment : Fragment() {
             } else {
                 // 필수 정보가 입력되지 않은 경우 토스트 메시지 표시
                 Toast.makeText(requireContext(), "입력되지 않은 정보가 있습니다", Toast.LENGTH_SHORT).show()
+            }
+        }
+        eventOff.setOnClickListener {
+            isClicked = !isClicked//true
+            eventOff.setBackgroundResource(if (isClicked) R.color.light_main else R.color.beige)//true니깐 ㄱㄱ
+            event5s.setBackgroundResource(R.color.beige)
+            event1m.setBackgroundResource(R.color.beige)
+
+            if (isClicked) {
+
+                notificationHelper.cancelNotification()
+            }
+        }
+
+        event5s.setOnClickListener {
+            isClicked = !isClicked
+
+            // 버튼 배경색 변경
+            eventOff.setBackgroundResource(R.color.beige)
+            event5s.setBackgroundResource(if (isClicked) R.color.light_main else R.color.beige)
+            event1m.setBackgroundResource(R.color.beige)
+
+            if (isClicked) {
+                notificationHelper.scheduleNotification(true,  name = nameEdit.text.toString())
+            } else {
+                notificationHelper.cancelNotification()
+            }
+        }
+
+        event1m.setOnClickListener {
+            isClicked = !isClicked
+
+            eventOff.setBackgroundResource(R.color.beige)
+            event5s.setBackgroundResource(R.color.beige)
+            event1m.setBackgroundResource(if (isClicked) R.color.light_main else R.color.beige)
+
+            if (isClicked) {
+                notificationHelper.scheduleNotification(false, name = nameEdit.text.toString())
+            } else {
+                notificationHelper.cancelNotification()
             }
         }
         dialogView.findViewById<Button>(R.id.cancelBt)?.setOnClickListener {
@@ -301,7 +300,6 @@ class ContactFragment : Fragment() {
         contactAdapter.notifyDataSetChanged()
     }
 
-
     private fun performSearch(query: String) {
         val chosungQuery = extractConsonant(query)
 
@@ -341,7 +339,6 @@ class ContactFragment : Fragment() {
             binding.listBtn.setBackgroundResource(R.drawable.clicked_list)
         }
     }
-
     private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
             Toast.makeText(context,"권한 허용",Toast.LENGTH_SHORT).show()
@@ -351,7 +348,6 @@ class ContactFragment : Fragment() {
             Toast.makeText(context,"권한을 거부",Toast.LENGTH_SHORT).show()
         }
     }
-
     private fun requestPermission() {
         val readContactsPermission = Manifest.permission.READ_CONTACTS
         if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), readContactsPermission)) {
@@ -377,8 +373,6 @@ class ContactFragment : Fragment() {
                 val name = cursor.getString(nameIndex)
                 val number = cursor.getString(numberIndex)
 
-                Toast.makeText(context, "add data : ${name}", Toast.LENGTH_SHORT)
-                    .show() //최종적으로 삭제 예정
                 ContactsManager.contactsList.add(
                     Contact(
                         name,
