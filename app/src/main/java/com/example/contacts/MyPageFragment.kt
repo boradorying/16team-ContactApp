@@ -22,8 +22,8 @@ class MyPageFragment : Fragment() {
     private lateinit var binding: FragmentMyPageBinding
 
 
-    private  val EDIT_IMAGE_REQUEST_CODE_MY = 5
-    private var selectedImageUri: Uri? = null
+    private val EDIT_IMAGE_REQUEST_CODE_MY = 5
+    private lateinit var selectedImageUri: Uri
     private lateinit var editImage: ImageView
     //kotlin lateinit check
 
@@ -90,7 +90,7 @@ class MyPageFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == EDIT_IMAGE_REQUEST_CODE_MY && resultCode == Activity.RESULT_OK && data != null) {
-            selectedImageUri = data.data
+            selectedImageUri = data.data!!
             try {
                 editImage.setImageURI(selectedImageUri)
             } catch (e: Exception) {

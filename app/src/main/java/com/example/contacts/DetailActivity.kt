@@ -21,11 +21,10 @@ import com.google.android.material.snackbar.Snackbar
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
-    private var selectedImageUri: Uri? = null
     private val EDIT_IMAGE_REQUEST_CODE_DETAIL = 6
     private lateinit var editImage: ImageView
-
-    companion object {
+    private var selectedImageUri: Uri? = null
+        companion object {
         private lateinit var detailContact: Contact
         private var contactPosition = 0
 
@@ -36,6 +35,7 @@ class DetailActivity : AppCompatActivity() {
             Intent(context, DetailActivity::class.java).apply {
                 detailContact = contact
                 contactPosition = position
+
             }
     }
 
@@ -43,7 +43,7 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+//        selectedImageUri = detailContact.profileImageUri
 
         binding.apply {
             tvMobile.text = detailContact.phoneNumber
@@ -88,7 +88,6 @@ class DetailActivity : AppCompatActivity() {
                 detailContact.phoneNumber = tvMobile.text.toString()
                 detailContact.email = tvEmail.text.toString()
                 detailContact.profileImageUri = selectedImageUri
-                detailContact.isNew = true
 
                 val resultIntent = Intent()
 //                resultIntent.putExtra("BOOKMARK", detailContact.bookmark)
@@ -108,7 +107,6 @@ class DetailActivity : AppCompatActivity() {
             }
         }
 
-
         binding.editBtn.setOnClickListener {
 
             val builder = AlertDialog.Builder(this)
@@ -126,9 +124,9 @@ class DetailActivity : AppCompatActivity() {
 
             // 갤러리에서 이미지 선택을 위한 코드
             ibEditImg.setOnClickListener {
-                val intent =
-                    Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 startActivityForResult(intent, EDIT_IMAGE_REQUEST_CODE_DETAIL)
+
             }
 
             // p0에 해당 AlertDialog가 들어온다. findViewById를 통해 view를 가져와서 사용

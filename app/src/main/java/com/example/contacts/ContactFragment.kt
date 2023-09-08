@@ -277,12 +277,20 @@ class ContactFragment : Fragment() {
             val resultContact = data?.getParcelableExtra<Contact>(DetailActivity.CONTACT_ITEM)// 객체를 받아옴
             val resultPosition = data?.getIntExtra(DetailActivity.CONTACT_POSITION,0)//position을 받아와줌
             if (resultContact?.bookmark != null && resultPosition != null) {
+//                contactItems[resultPosition].name = resultContact.name
+//                contactItems[resultPosition].email = resultContact.email
+//                contactItems[resultPosition].phoneNumber = resultContact.phoneNumber
+//                contactItems[resultPosition].bookmark = resultContact.bookmark
+//                contactItems[resultPosition].profileImageUri = resultContact.profileImageUri
+//                contactItems[resultPosition].isNew = resultContact.isNew
+
                 contactItems[resultPosition].name = resultContact.name
                 contactItems[resultPosition].email = resultContact.email
                 contactItems[resultPosition].phoneNumber = resultContact.phoneNumber
                 contactItems[resultPosition].bookmark = resultContact.bookmark
                 contactItems[resultPosition].profileImageUri = resultContact.profileImageUri
                 contactItems[resultPosition].isNew = resultContact.isNew
+
 //                for (contact in contactItems) {//포문을 이용해서 컨택트 아이템의 아이템의 북마크에 접근해서 새로운값으로 초기화
 //                    if (contact.phoneNumber == resultContact.phoneNumber) {
 //                        contact.bookmark = resultContact.bookmark
