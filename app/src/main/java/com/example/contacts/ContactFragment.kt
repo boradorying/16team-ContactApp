@@ -14,6 +14,7 @@ import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -277,12 +278,6 @@ class ContactFragment : Fragment() {
             val resultContact = data?.getParcelableExtra<Contact>(DetailActivity.CONTACT_ITEM)// 객체를 받아옴
             val resultPosition = data?.getIntExtra(DetailActivity.CONTACT_POSITION,0)//position을 받아와줌
             if (resultContact?.bookmark != null && resultPosition != null) {
-//                contactItems[resultPosition].name = resultContact.name
-//                contactItems[resultPosition].email = resultContact.email
-//                contactItems[resultPosition].phoneNumber = resultContact.phoneNumber
-//                contactItems[resultPosition].bookmark = resultContact.bookmark
-//                contactItems[resultPosition].profileImageUri = resultContact.profileImageUri
-//                contactItems[resultPosition].isNew = resultContact.isNew
 
                 contactItems[resultPosition].name = resultContact.name
                 contactItems[resultPosition].email = resultContact.email
@@ -316,9 +311,7 @@ class ContactFragment : Fragment() {
         contactAdapter.productClick = object : ContactAdapter.ProductClick {
             override fun onClick(view: View, position: Int) {
                 startActivity(
-                    DetailActivity.newIntentForDetail(
-                        context, contactItems[position],position
-                    )
+                    DetailActivity.newIntentForDetail(context, contactItems[position],position)
                 )
             }
         }

@@ -8,6 +8,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -50,6 +51,7 @@ class DetailActivity : AppCompatActivity() {
             tvEmail.text = detailContact.email
             tvName.text = detailContact.name
             if (detailContact.isNew) {
+                Log.d("test","${detailContact.profileImageUri}")
                 Glide.with(binding.root.context)
                     .load(detailContact.profileImageUri)
                     .into(binding.ivUser)
@@ -162,6 +164,7 @@ class DetailActivity : AppCompatActivity() {
 
         if (requestCode == EDIT_IMAGE_REQUEST_CODE_DETAIL && resultCode == Activity.RESULT_OK && data != null) {
             selectedImageUri = data.data
+            Log.d("test","${selectedImageUri}")
             detailContact.isNew = true
             try {
                 editImage.setImageURI(selectedImageUri)
