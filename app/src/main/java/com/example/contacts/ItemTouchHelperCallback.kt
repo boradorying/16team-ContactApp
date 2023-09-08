@@ -1,10 +1,7 @@
 package com.example.contacts
 
 import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.RectF
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
@@ -17,7 +14,6 @@ class ItemTouchHelperCallback(
 
     var onSwipeListener: ((Float, RecyclerView.ViewHolder) -> Unit)? = null
     var onSwipe: ((Float, Int) -> Unit)? = null
-
     override fun onMove(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,

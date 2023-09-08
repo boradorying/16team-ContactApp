@@ -7,8 +7,10 @@
     <string name="mobile_data">010-3333-3333</string>
     <string name="permission_denied">⚠️권한이 거부되었습니다.</string>
     <string name="permission_allowed">✅권한이 허용되었습니다.</string>
-    <string name="email">Email</string>
     <string name="email_data">softychoo@gmail.com</string>
     <string name="notification">Notification</string>
     <string name="notification_data">after 1 hour</string>
+    <string name="name">Name</string>
+    <string name="phonenumber">PhoneNumber</string>
+    <string name="email">Email</string>
 </resources>

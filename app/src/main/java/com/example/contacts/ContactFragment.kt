@@ -33,7 +33,6 @@ import com.example.contacts.Util.callPhoneNumber
 import com.example.contacts.databinding.FragmentContactBinding
 import de.hdodenhof.circleimageview.CircleImageView
 
-
 class ContactFragment : Fragment() {
     private lateinit var binding: FragmentContactBinding
     private lateinit var contactAdapter: ContactAdapter
@@ -64,19 +63,21 @@ class ContactFragment : Fragment() {
         setLayoutManager() // 초기 레이아웃 매니저 설정
         //requirePermission()//권한 받아
 
-
         // 권한 체크
         val readContactsPermission = Manifest.permission.READ_CONTACTS
 
         // 권한이 이미 허용되었는지 확인
-        if (ContextCompat.checkSelfPermission(requireContext(), readContactsPermission) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                readContactsPermission
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             // 권한이 이미 허용된 경우 실행할 코드
             getContact()
         } else {
             // 권한을 요청
             requestPermission()
         }
-
 
         // ItemTouchHelper 추가
         val swipeDirection = if (isGridMode) 0 else ItemTouchHelper.RIGHT
@@ -102,7 +103,7 @@ class ContactFragment : Fragment() {
         contactAdapter.productClick = object : ContactAdapter.ProductClick {
             override fun onClick(view: View, position: Int) {
                 val detailIntent = DetailActivity.newIntentForDetail(
-                    context, contactItems[position]
+                    context, contactItems[position], position
                 )
                 startActivityForResult(detailIntent, REQUEST_CODE_DETAIL)
             }
@@ -123,7 +124,6 @@ class ContactFragment : Fragment() {
         binding.floatingBtn.setOnClickListener {
             showAddContactDialog()
         }
-
 
         binding.searchEdit.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -155,22 +155,18 @@ class ContactFragment : Fragment() {
         val event5s = dialogView.findViewById<Button>(R.id.eventBtn2)
         val event1m = dialogView.findViewById<Button>(R.id.eventBtn3)
 
-
-
         eventOff.setOnClickListener {
             isClicked = !isClicked//true
-
             eventOff.setBackgroundResource(if (isClicked) R.color.light_main else R.color.beige)//true니깐 ㄱㄱ
             event5s.setBackgroundResource(R.color.beige)
             event1m.setBackgroundResource(R.color.beige)
 
-
             if (isClicked) {
+
                 notificationHelper.cancelNotification()
             }
 
         }
-
 
         event5s.setOnClickListener {
             isClicked = !isClicked
@@ -185,7 +181,6 @@ class ContactFragment : Fragment() {
                 notificationHelper.scheduleNotification(true)
             } else {
                 notificationHelper.cancelNotification()
-
             }
         }
 
@@ -196,15 +191,12 @@ class ContactFragment : Fragment() {
             event5s.setBackgroundResource(R.color.beige)
             event1m.setBackgroundResource(if (isClicked) R.color.light_main else R.color.beige)
 
-
             if (isClicked) {
                 notificationHelper.scheduleNotification(false)
             } else {
                 notificationHelper.cancelNotification()
-
             }
         }
-
 
         // addPhotoBtn 클릭 이벤트 설정
         addPhotoBtn.setOnClickListener {
@@ -219,14 +211,11 @@ class ContactFragment : Fragment() {
             val phoneNumber = numberEdit.text.toString()
             val email = emailEdit.text.toString()
 
-
-
             // 필수 정보가 입력되었는지 확인
             if (name.isNotEmpty() && phoneNumber.isNotEmpty() && email.isNotEmpty()) {
                 // Contact로 사용자 입력 정보 전달
                 var isNewBoolean = true
-                if(selectedImageUri == null)
-                {
+                if (selectedImageUri == null) {
                     isNewBoolean = false
                 }
 
@@ -240,7 +229,7 @@ class ContactFragment : Fragment() {
                     isNewBoolean,
                     false
                 )
-                selectedImageUri =null
+                selectedImageUri = null
                 ContactsManager.contactsList.add(newContact)
                 ContactsManager.contactsList.sortBy { it.name }
                 contactItems.clear()
@@ -271,17 +260,21 @@ class ContactFragment : Fragment() {
                 // 이미지를 "profileImage"에 설정
                 profileImage.setImageURI(selectedImageUri)
             }
-        }
-        else if (requestCode == REQUEST_CODE_DETAIL && resultCode == RESULT_OK) {
+        } else if (requestCode == REQUEST_CODE_DETAIL && resultCode == RESULT_OK) {
 
-            val updatedBookmark = data?.getBooleanExtra("BOOKMARK", false)
-            val phonumber = data?.getStringExtra("PHONE")
-            if (updatedBookmark != null && phonumber !=null) {
-                for (contact in contactItems) {//포문을 이용해서 컨택트 아이템의 아이템의 북마크에 접근해서 새로운값으로 초기화
-                    if (contact.phoneNumber == phonumber) {
-                        contact.bookmark = updatedBookmark
-                    }
-                }
+            val resultContact =
+                data?.getParcelableExtra<Contact>(DetailActivity.CONTACT_ITEM)// 객체를 받아옴
+            val resultPosition =
+                data?.getIntExtra(DetailActivity.CONTACT_POSITION, 0)//position을 받아와줌
+            if (resultContact?.bookmark != null && resultPosition != null) {
+
+                contactItems[resultPosition].name = resultContact.name
+                contactItems[resultPosition].email = resultContact.email
+                contactItems[resultPosition].phoneNumber = resultContact.phoneNumber
+                contactItems[resultPosition].bookmark = resultContact.bookmark
+                contactItems[resultPosition].profileImageUri = resultContact.profileImageUri
+                contactItems[resultPosition].isNew = resultContact.isNew
+
                 contactAdapter.notifyDataSetChanged()
             }
         }
@@ -301,9 +294,7 @@ class ContactFragment : Fragment() {
         contactAdapter.productClick = object : ContactAdapter.ProductClick {
             override fun onClick(view: View, position: Int) {
                 startActivity(
-                    DetailActivity.newIntentForDetail(
-                        context, contactItems[position]
-                    )
+                    DetailActivity.newIntentForDetail(context, contactItems[position], position)
                 )
             }
         }
@@ -312,7 +303,7 @@ class ContactFragment : Fragment() {
 
 
     private fun performSearch(query: String) {
-        val chosungQuery =extractConsonant(query)
+        val chosungQuery = extractConsonant(query)
 
         val filteredList = ContactsManager.contactsList.filter { contact ->//컨택트아이템이 아닌 컨택트 매니저읰 컨택트리스트를 필터
             val chosungName =extractConsonant(contact.name) // 초성변환후 변수 저장
@@ -370,7 +361,7 @@ class ContactFragment : Fragment() {
         }
     }
     private fun getContact() {
-        Toast.makeText(context,"연락처를 성공적으로 불러왔습니다!",Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "연락처를 성공적으로 불러왔습니다!", Toast.LENGTH_SHORT).show()
         val resolver: ContentResolver = (activity as MainActivity).contentResolver
         val phoneUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
         val projection = arrayOf(
@@ -386,17 +377,18 @@ class ContactFragment : Fragment() {
                 val name = cursor.getString(nameIndex)
                 val number = cursor.getString(numberIndex)
 
-                Toast.makeText(context,"add data : ${name}",Toast.LENGTH_SHORT).show() //최종적으로 삭제 예정
+                Toast.makeText(context, "add data : ${name}", Toast.LENGTH_SHORT)
+                    .show() //최종적으로 삭제 예정
                 ContactsManager.contactsList.add(
                     Contact(
                         name,
                         number,
-                        null,
+                        "empty",
                         profileImageUri = null,
                         photo = R.drawable.unclicked_user,
                         bookmark = false,
                         isNew = false,
-                                isCilked =false
+                        isCilked = false
                     )
                 )
             }
@@ -405,5 +397,4 @@ class ContactFragment : Fragment() {
             cursor.close()
         }
     }
-
 }

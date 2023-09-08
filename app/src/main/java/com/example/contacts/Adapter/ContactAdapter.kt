@@ -1,6 +1,5 @@
 package com.example.contacts.Adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,13 +30,6 @@ class ContactAdapter(
         contact.addAll(newList)
         notifyDataSetChanged()
     }//프래그먼트에서  함수호출하는거임
-
-//    fun addContact(import_contact: Contact) {
-//        contact.add(import_contact)
-//        contact.sortBy { it.name }
-//        Log.d("test","${contact.size}")
-//        notifyDataSetChanged()
-//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
