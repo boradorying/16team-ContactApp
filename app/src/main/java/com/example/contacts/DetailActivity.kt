@@ -36,7 +36,6 @@ class DetailActivity : AppCompatActivity() {
             Intent(context, DetailActivity::class.java).apply {
                 detailContact = contact
                 contactPosition = position
-
             }
     }
 
@@ -44,7 +43,7 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        selectedImageUri = detailContact.profileImageUri
+        selectedImageUri = detailContact.profileImageUri //null값 fix
 
         binding.apply {
             tvMobile.text = detailContact.phoneNumber
