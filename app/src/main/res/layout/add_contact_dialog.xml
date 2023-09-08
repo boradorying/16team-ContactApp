@@ -7,10 +7,10 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
-        android:layout_height="470dp"
+        android:layout_height="wrap_content"
         android:background="@color/beige"
+        android:paddingBottom="25dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -18,7 +18,7 @@
             android:id="@+id/profileImage"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="20dp"
             android:src="@drawable/un_selsected_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,10 +28,8 @@
             android:id="@+id/addPhotoBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="90dp"
             app:layout_constraintBottom_toBottomOf="@+id/profileImage"
             app:layout_constraintEnd_toEndOf="@+id/profileImage"
-            app:layout_constraintTop_toTopOf="@+id/profileImage"
             app:srcCompat="@drawable/add_photo" />
 
         <EditText
@@ -81,77 +79,72 @@
             android:id="@+id/eventBtn1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="220dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
             android:background="@color/beige"
             android:fontFamily="@font/komi"
             android:text="OFF"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/eMailEdit"
-            app:layout_constraintStart_toStartOf="@+id/eMailEdit"
-            app:layout_constraintTop_toBottomOf="@+id/eMailEdit" />
+            app:layout_constraintEnd_toStartOf="@id/eventBtn2"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/eMailEdit" />
 
         <Button
             android:id="@+id/eventBtn2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
             android:background="@color/beige"
             android:fontFamily="@font/komi"
             android:text="5분"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/eMailEdit"
-            app:layout_constraintStart_toStartOf="@+id/eMailEdit"
-            app:layout_constraintTop_toBottomOf="@+id/eMailEdit" />
+            app:layout_constraintEnd_toStartOf="@id/eventBtn3"
+            app:layout_constraintStart_toEndOf="@id/eventBtn1"
+            app:layout_constraintTop_toBottomOf="@id/eMailEdit" />
 
         <Button
             android:id="@+id/eventBtn3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="163dp"
+            android:layout_marginTop="20dp"
             android:background="@color/beige"
             android:fontFamily="@font/komi"
             android:text="1시간"
-
-
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/eventBtn1"
-
-            app:layout_constraintStart_toStartOf="@+id/eMailEdit"
-            app:layout_constraintTop_toBottomOf="@+id/eMailEdit"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/eventBtn2"
+            app:layout_constraintTop_toBottomOf="@id/eMailEdit" />
 
         <Button
             android:id="@+id/cancelBt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="20dp"
             android:background="@drawable/dialog_bt"
             android:fontFamily="@font/komi"
             android:text="취소"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.226"
+            app:layout_constraintEnd_toStartOf="@id/saveBt"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@id/eventBtn1" />
 
         <Button
             android:id="@+id/saveBt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="25dp"
             android:background="@drawable/dialog_bt"
             android:fontFamily="@font/komi"
             android:text="저장"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.546"
-            app:layout_constraintStart_toEndOf="@+id/cancelBt"
-
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintStart_toEndOf="@id/cancelBt"
+            app:layout_constraintTop_toBottomOf="@id/eventBtn1" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
