@@ -79,7 +79,6 @@ class NotificationHelper(private val context: Context) {
         )
     }
 
-
     fun showNotification(notificationId: Int, notificationText: String) {
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.donge)
@@ -100,12 +99,10 @@ class NotificationHelper(private val context: Context) {
         notificationManager.notify(notificationId, builder.build())
     }
 
-
      fun cancelNotification() {
         alarmManager?.cancel(alarmIntent)
          alarmIntent = null
     }
-
 
     fun generateUniqueRequestCode(): Int {
         val currentTimeMillis = System.currentTimeMillis()

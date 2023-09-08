@@ -25,7 +25,8 @@ class DetailActivity : AppCompatActivity() {
     private val EDIT_IMAGE_REQUEST_CODE_DETAIL = 6
     private lateinit var editImage: ImageView
     private var selectedImageUri: Uri? = null
-        companion object {
+
+    companion object {
         private lateinit var detailContact: Contact
         private var contactPosition = 0
 
@@ -36,6 +37,7 @@ class DetailActivity : AppCompatActivity() {
             Intent(context, DetailActivity::class.java).apply {
                 detailContact = contact
                 contactPosition = position
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
     }
 
@@ -50,7 +52,7 @@ class DetailActivity : AppCompatActivity() {
             tvEmail.text = detailContact.email
             tvName.text = detailContact.name
             if (detailContact.isNew) {
-                Log.d("test","${detailContact.profileImageUri}")
+                Log.d("test", "${detailContact.profileImageUri}")
                 Glide.with(binding.root.context)
                     .load(detailContact.profileImageUri)
                     .into(binding.ivUser)
@@ -65,9 +67,7 @@ class DetailActivity : AppCompatActivity() {
             }
 
             binding.bookmark.setOnClickListener {
-
                 detailContact.bookmark = !detailContact.bookmark
-
 
                 if (detailContact.bookmark) {
                     binding.bookmark.setBackgroundResource(R.drawable.clicked_bookmark)
@@ -76,23 +76,17 @@ class DetailActivity : AppCompatActivity() {
                     binding.bookmark.setBackgroundResource(R.drawable.unclicked_bookmark)
                     showSnackBarMessage("                                   ⭐즐찾해제⭐")
                 }
-//                val resultIntent = Intent()
-//                resultIntent.putExtra("BOOKMARK", detailContact.bookmark)
-//                resultIntent.putExtra("PHONE", detailContact.phoneNumber)
-//
-//                setResult(RESULT_OK, resultIntent)
-
             }
             // 뒤로가기 실행 시 데이터 넘겨줌
             btnBackPressed.setOnClickListener {
                 detailContact.name = tvName.text.toString()
                 detailContact.phoneNumber = tvMobile.text.toString()
                 detailContact.email = tvEmail.text.toString()
-                detailContact.profileImageUri = selectedImageUri
+                if (selectedImageUri != null) {
+                    detailContact.profileImageUri = selectedImageUri
+                }
 
                 val resultIntent = Intent()
-//                resultIntent.putExtra("BOOKMARK", detailContact.bookmark)
-//                resultIntent.putExtra("PHONE", detailContact.phoneNumber)
                 resultIntent.putExtra(CONTACT_ITEM, detailContact) // 객체 콜백으로 전송
                 resultIntent.putExtra(CONTACT_POSITION, contactPosition) // 수정에 필요한 position
                 setResult(RESULT_OK, resultIntent)
@@ -125,7 +119,8 @@ class DetailActivity : AppCompatActivity() {
 
             // 갤러리에서 이미지 선택을 위한 코드
             ibEditImg.setOnClickListener {
-                val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                val intent =
+                    Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 startActivityForResult(intent, EDIT_IMAGE_REQUEST_CODE_DETAIL)
 
             }
@@ -163,7 +158,7 @@ class DetailActivity : AppCompatActivity() {
 
         if (requestCode == EDIT_IMAGE_REQUEST_CODE_DETAIL && resultCode == Activity.RESULT_OK && data != null) {
             selectedImageUri = data.data
-            Log.d("test","${selectedImageUri}")
+            Log.d("test", "${selectedImageUri}")
             detailContact.isNew = true
             try {
                 editImage.setImageURI(selectedImageUri)

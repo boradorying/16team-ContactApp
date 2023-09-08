@@ -45,9 +45,11 @@ class ContactFragment : Fragment() {
     private lateinit var profileImage: CircleImageView
     private var selectedImageUri: Uri? = null
     private var isClicked = false
+
     // swipe x값
     private var swipeDx = 0f
     private var swipePosition = -1
+
     companion object {
         const val REQUEST_PHONE_CALL = 1
         const val REQUEST_CODE_DETAIL = -1
@@ -70,7 +72,11 @@ class ContactFragment : Fragment() {
         val readContactsPermission = Manifest.permission.READ_CONTACTS
 
         // 권한이 이미 허용되었는지 확인
-        if (ContextCompat.checkSelfPermission(requireContext(), readContactsPermission) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                readContactsPermission
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             // 권한이 이미 허용된 경우 실행할 코드
             getContact()
         } else {
@@ -103,7 +109,7 @@ class ContactFragment : Fragment() {
         contactAdapter.productClick = object : ContactAdapter.ProductClick {
             override fun onClick(view: View, position: Int) {
                 val detailIntent = DetailActivity.newIntentForDetail(
-                    context, contactItems[position],position
+                    context, contactItems[position], position
                 )
                 startActivityForResult(detailIntent, REQUEST_CODE_DETAIL)
             }
@@ -220,13 +226,11 @@ class ContactFragment : Fragment() {
             val email = emailEdit.text.toString()
 
 
-
             // 필수 정보가 입력되었는지 확인
             if (name.isNotEmpty() && phoneNumber.isNotEmpty() && email.isNotEmpty()) {
                 // Contact로 사용자 입력 정보 전달
                 var isNewBoolean = true
-                if(selectedImageUri == null)
-                {
+                if (selectedImageUri == null) {
                     isNewBoolean = false
                 }
 
@@ -240,7 +244,7 @@ class ContactFragment : Fragment() {
                     isNewBoolean,
                     false
                 )
-                selectedImageUri =null
+                selectedImageUri = null
                 ContactsManager.contactsList.add(newContact)
                 ContactsManager.contactsList.sortBy { it.name }
                 contactItems.clear()
@@ -270,13 +274,14 @@ class ContactFragment : Fragment() {
                 // 이미지를 "profileImage"에 설정
                 profileImage.setImageURI(selectedImageUri)
             }
-        }
-        else if (requestCode == REQUEST_CODE_DETAIL && resultCode == RESULT_OK) {
+        } else if (requestCode == REQUEST_CODE_DETAIL && resultCode == RESULT_OK) {
 
 //            val updatedBookmark = data?.getBooleanExtra("BOOKMARK", false)
 //            val phonumber = data?.getStringExtra("PHONE")
-            val resultContact = data?.getParcelableExtra<Contact>(DetailActivity.CONTACT_ITEM)// 객체를 받아옴
-            val resultPosition = data?.getIntExtra(DetailActivity.CONTACT_POSITION,0)//position을 받아와줌
+            val resultContact =
+                data?.getParcelableExtra<Contact>(DetailActivity.CONTACT_ITEM)// 객체를 받아옴
+            val resultPosition =
+                data?.getIntExtra(DetailActivity.CONTACT_POSITION, 0)//position을 받아와줌
             if (resultContact?.bookmark != null && resultPosition != null) {
 
                 contactItems[resultPosition].name = resultContact.name
@@ -297,6 +302,7 @@ class ContactFragment : Fragment() {
             }
         }
     }
+
     private fun setLayoutManager() {
         if (isGridMode) {
             val layoutManager = GridLayoutManager(requireContext(), 3)
@@ -306,12 +312,13 @@ class ContactFragment : Fragment() {
             binding.RVArea.layoutManager = layoutManager
         }
         contactAdapter = ContactAdapter(contactItems, isGridMode) // 어댑터 다시 설정!!!!!!!!!
-        binding.RVArea.adapter = contactAdapter // 어댑터를 다시 설정해주는건 버튼을 눌렀을때 어댑터가 그냥 그리드뷰로 바뀌기 때문에 바인딩해주고ㅓ 초기화
+        binding.RVArea.adapter =
+            contactAdapter // 어댑터를 다시 설정해주는건 버튼을 눌렀을때 어댑터가 그냥 그리드뷰로 바뀌기 때문에 바인딩해주고ㅓ 초기화
 
         contactAdapter.productClick = object : ContactAdapter.ProductClick {
             override fun onClick(view: View, position: Int) {
                 startActivity(
-                    DetailActivity.newIntentForDetail(context, contactItems[position],position)
+                    DetailActivity.newIntentForDetail(context, contactItems[position], position)
                 )
             }
         }
@@ -320,15 +327,17 @@ class ContactFragment : Fragment() {
 
 
     private fun performSearch(query: String) {
-        val chosungQuery =extractConsonant(query)
+        val chosungQuery = extractConsonant(query)
 
-        val filteredList = ContactsManager.contactsList.filter { contact ->//컨택트아이템이 아닌 컨택트 매니저읰 컨택트리스트를 필터
-            val chosungName =extractConsonant(contact.name) // 초성변환후 변수 저장
-            chosungName.contains(chosungQuery,true) //초성이름이 초성쿼리에 포함된것 확인함
-        }
+        val filteredList =
+            ContactsManager.contactsList.filter { contact ->//컨택트아이템이 아닌 컨택트 매니저읰 컨택트리스트를 필터
+                val chosungName = extractConsonant(contact.name) // 초성변환후 변수 저장
+                chosungName.contains(chosungQuery, true) //초성이름이 초성쿼리에 포함된것 확인함
+            }
         contactAdapter.updateContactList(filteredList)
 
     }
+
     private fun extractConsonant(input: String): String {
         val chosungBuilder = StringBuilder()//초성문자열저장하는거코틀린에 있는 클래스
 
@@ -359,26 +368,32 @@ class ContactFragment : Fragment() {
         }
     }
 
-    private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-        if (isGranted) {
-            Toast.makeText(context,"권한 허용",Toast.LENGTH_SHORT).show()
-            getContact()
-            contactAdapter.notifyDataSetChanged()
-        } else {
-            Toast.makeText(context,"권한을 거부",Toast.LENGTH_SHORT).show()
+    private val permissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                Toast.makeText(context, "권한 허용", Toast.LENGTH_SHORT).show()
+                getContact()
+                contactAdapter.notifyDataSetChanged()
+            } else {
+                Toast.makeText(context, "권한을 거부", Toast.LENGTH_SHORT).show()
+            }
         }
-    }
 
     private fun requestPermission() {
         val readContactsPermission = Manifest.permission.READ_CONTACTS
-        if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), readContactsPermission)) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(
+                requireActivity(),
+                readContactsPermission
+            )
+        ) {
             getContact() //true
         } else { // false
             permissionLauncher.launch(readContactsPermission)
         }
     }
+
     private fun getContact() {
-        Toast.makeText(context,"연락처를 성공적으로 불러왔습니다!",Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "연락처를 성공적으로 불러왔습니다!", Toast.LENGTH_SHORT).show()
         val resolver: ContentResolver = (activity as MainActivity).contentResolver
         val phoneUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
         val projection = arrayOf(
@@ -394,7 +409,8 @@ class ContactFragment : Fragment() {
                 val name = cursor.getString(nameIndex)
                 val number = cursor.getString(numberIndex)
 
-                Toast.makeText(context,"add data : ${name}",Toast.LENGTH_SHORT).show() //최종적으로 삭제 예정
+                Toast.makeText(context, "add data : ${name}", Toast.LENGTH_SHORT)
+                    .show() //최종적으로 삭제 예정
                 ContactsManager.contactsList.add(
                     Contact(
                         name,
@@ -404,7 +420,7 @@ class ContactFragment : Fragment() {
                         photo = R.drawable.unclicked_user,
                         bookmark = false,
                         isNew = false,
-                                isCilked =false
+                        isCilked = false
                     )
                 )
             }
