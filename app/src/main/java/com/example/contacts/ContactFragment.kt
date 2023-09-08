@@ -385,7 +385,7 @@ class ContactFragment : Fragment() {
                         number,
                         "empty",
                         profileImageUri = null,
-                        photo = R.drawable.unclicked_user,
+                        photo = R.drawable.no_img,
                         bookmark = false,
                         isNew = false,
                         isCilked = false
