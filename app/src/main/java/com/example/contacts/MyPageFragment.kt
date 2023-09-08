@@ -20,10 +20,9 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class MyPageFragment : Fragment() {
     private lateinit var binding: FragmentMyPageBinding
-    companion object{
-        val EDIT_IMAGE_REQUEST_CODE = 5
 
-    }
+
+    private  val EDIT_IMAGE_REQUEST_CODE_MY = 5
     private var selectedImageUri: Uri? = null
     private lateinit var editImage: ImageView
     //kotlin lateinit check
@@ -54,7 +53,7 @@ class MyPageFragment : Fragment() {
             ibEditImg.setOnClickListener {
                 val intent =
                     Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                startActivityForResult(intent, EDIT_IMAGE_REQUEST_CODE)
+                startActivityForResult(intent, EDIT_IMAGE_REQUEST_CODE_MY)
             }
 
             // p0에 해당 AlertDialog가 들어온다. findViewById를 통해 view를 가져와서 사용
@@ -90,7 +89,7 @@ class MyPageFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == EDIT_IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == EDIT_IMAGE_REQUEST_CODE_MY && resultCode == Activity.RESULT_OK && data != null) {
             selectedImageUri = data.data
             try {
                 editImage.setImageURI(selectedImageUri)

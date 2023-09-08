@@ -1,5 +1,6 @@
 package com.example.contacts
 
+import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -11,7 +12,9 @@ import android.provider.MediaStore
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.bumptech.glide.Glide
 import com.example.contacts.Util.callPhoneNumber
 import com.example.contacts.Util.messagePhoneNumber
@@ -21,6 +24,7 @@ import com.google.android.material.snackbar.Snackbar
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private var selectedImageUri: Uri? = null
+    private val EDIT_IMAGE_REQUEST_CODE_DETAIL = 6
     private lateinit var editImage: ImageView
 
     companion object {
@@ -109,7 +113,7 @@ class DetailActivity : AppCompatActivity() {
             ibEditImg.setOnClickListener {
                 val intent =
                     Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                startActivityForResult(intent, MyPageFragment.EDIT_IMAGE_REQUEST_CODE)
+                startActivityForResult(intent, EDIT_IMAGE_REQUEST_CODE_DETAIL)
             }
 
             // p0에 해당 AlertDialog가 들어온다. findViewById를 통해 view를 가져와서 사용
@@ -137,6 +141,20 @@ class DetailActivity : AppCompatActivity() {
             val alertDialog = builder.create() // AlertDialog를 생성합니다.
 
             alertDialog.show()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == EDIT_IMAGE_REQUEST_CODE_DETAIL && resultCode == Activity.RESULT_OK && data != null) {
+            selectedImageUri = data.data
+            try {
+                editImage.setImageURI(selectedImageUri)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this, "이미지 설정에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
