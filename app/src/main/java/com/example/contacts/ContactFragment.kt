@@ -2,7 +2,6 @@ package com.example.contacts
 
 
 import android.Manifest
-import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.ContentResolver
@@ -14,7 +13,6 @@ import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +32,6 @@ import com.example.contacts.Notification.NotificationHelper
 import com.example.contacts.Util.callPhoneNumber
 import com.example.contacts.databinding.FragmentContactBinding
 import de.hdodenhof.circleimageview.CircleImageView
-
 
 class ContactFragment : Fragment() {
     private lateinit var binding: FragmentContactBinding
@@ -66,7 +63,6 @@ class ContactFragment : Fragment() {
         setLayoutManager() // 초기 레이아웃 매니저 설정
         //requirePermission()//권한 받아
 
-
         // 권한 체크
         val readContactsPermission = Manifest.permission.READ_CONTACTS
 
@@ -82,7 +78,6 @@ class ContactFragment : Fragment() {
             // 권한을 요청
             requestPermission()
         }
-
 
         // ItemTouchHelper 추가
         val swipeDirection = if (isGridMode) 0 else ItemTouchHelper.RIGHT
@@ -130,7 +125,6 @@ class ContactFragment : Fragment() {
             showAddContactDialog()
         }
 
-
         binding.searchEdit.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -161,11 +155,8 @@ class ContactFragment : Fragment() {
         val event5s = dialogView.findViewById<Button>(R.id.eventBtn2)
         val event1m = dialogView.findViewById<Button>(R.id.eventBtn3)
 
-
-
         eventOff.setOnClickListener {
             isClicked = !isClicked//true
-
             eventOff.setBackgroundResource(if (isClicked) R.color.light_main else R.color.beige)//true니깐 ㄱㄱ
             event5s.setBackgroundResource(R.color.beige)
             event1m.setBackgroundResource(R.color.beige)
@@ -176,7 +167,6 @@ class ContactFragment : Fragment() {
             }
 
         }
-
 
         event5s.setOnClickListener {
             isClicked = !isClicked
@@ -201,14 +191,12 @@ class ContactFragment : Fragment() {
             event5s.setBackgroundResource(R.color.beige)
             event1m.setBackgroundResource(if (isClicked) R.color.light_main else R.color.beige)
 
-
             if (isClicked) {
                 notificationHelper.scheduleNotification(false)
             } else {
                 notificationHelper.cancelNotification()
             }
         }
-
 
         // addPhotoBtn 클릭 이벤트 설정
         addPhotoBtn.setOnClickListener {
@@ -222,8 +210,6 @@ class ContactFragment : Fragment() {
             val name = nameEdit.text.toString()
             val phoneNumber = numberEdit.text.toString()
             val email = emailEdit.text.toString()
-
-
 
             // 필수 정보가 입력되었는지 확인
             if (name.isNotEmpty() && phoneNumber.isNotEmpty() && email.isNotEmpty()) {
@@ -411,5 +397,4 @@ class ContactFragment : Fragment() {
             cursor.close()
         }
     }
-
 }

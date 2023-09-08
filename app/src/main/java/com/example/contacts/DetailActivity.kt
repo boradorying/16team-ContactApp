@@ -7,9 +7,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Messenger
-import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import android.provider.MediaStore
@@ -20,7 +17,6 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
-import com.example.contacts.Adapter.ContactAdapter
 import com.example.contacts.Util.callPhoneNumber
 import com.example.contacts.Util.messagePhoneNumber
 import com.example.contacts.databinding.ActivityDetailBinding
@@ -31,7 +27,6 @@ class DetailActivity : AppCompatActivity() {
     private val EDIT_IMAGE_REQUEST_CODE_DETAIL = 6
     private lateinit var editImage: ImageView
     private var selectedImageUri: Uri? = null
-
 
     companion object {
         private lateinit var detailContact: Contact
@@ -76,7 +71,6 @@ class DetailActivity : AppCompatActivity() {
             binding.bookmark.setOnClickListener {
 
                 detailContact.bookmark = !detailContact.bookmark
-
 
                 if (detailContact.bookmark) {
                     binding.bookmark.setBackgroundResource(R.drawable.clicked_bookmark)
@@ -129,7 +123,6 @@ class DetailActivity : AppCompatActivity() {
                 val intent =
                     Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 startActivityForResult(intent, EDIT_IMAGE_REQUEST_CODE_DETAIL)
-
             }
 
             // p0에 해당 AlertDialog가 들어온다. findViewById를 통해 view를 가져와서 사용
@@ -182,7 +175,5 @@ class DetailActivity : AppCompatActivity() {
 
         snackbarText.textAlignment = View.TEXT_ALIGNMENT_CENTER
         snackbar.show()
-
     }
-
 }

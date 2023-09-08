@@ -16,7 +16,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.example.contacts.databinding.FragmentMyPageBinding
-import de.hdodenhof.circleimageview.CircleImageView
 
 class MyPageFragment : Fragment() {
     private lateinit var binding: FragmentMyPageBinding
@@ -85,7 +84,6 @@ class MyPageFragment : Fragment() {
 
         return binding.root
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -99,6 +97,5 @@ class MyPageFragment : Fragment() {
             }
         }
     }
-
 }
 
