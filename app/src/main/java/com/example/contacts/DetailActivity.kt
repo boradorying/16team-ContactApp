@@ -93,6 +93,8 @@ class DetailActivity : AppCompatActivity() {
                 resultIntent.putExtra(CONTACT_ITEM, detailContact) // 객체 콜백으로 전송
                 resultIntent.putExtra(CONTACT_POSITION, contactPosition) // 수정에 필요한 position
                 setResult(RESULT_OK, resultIntent)
+
+                finish()
             }
 
             fabCall.setOnClickListener {
