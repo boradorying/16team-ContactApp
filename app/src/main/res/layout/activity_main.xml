@@ -28,6 +28,7 @@
         app:tabGravity="center"
         app:tabMode="fixed"
         app:tabIndicator="@null"
+        app:tabRippleColor="@color/light_main"
         android:background="@drawable/tab_layout_border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
