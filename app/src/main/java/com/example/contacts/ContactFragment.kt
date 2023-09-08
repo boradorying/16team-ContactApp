@@ -46,6 +46,7 @@ class ContactFragment : Fragment() {
     // swipe x값
     private var swipeDx = 0f
     private var swipePosition = -1
+    private val notificationHelper : NotificationHelper by lazy { NotificationHelper(requireContext()) }
     companion object {
         const val REQUEST_PHONE_CALL = 1
         const val REQUEST_CODE_DETAIL = -1
@@ -157,15 +158,14 @@ class ContactFragment : Fragment() {
 
 
         eventOff.setOnClickListener {
-            isClicked = !isClicked
+            isClicked = !isClicked//true
 
-            eventOff.setBackgroundResource(if (isClicked) R.color.light_main else R.color.beige)
+            eventOff.setBackgroundResource(if (isClicked) R.color.light_main else R.color.beige)//true니깐 ㄱㄱ
             event5s.setBackgroundResource(R.color.beige)
             event1m.setBackgroundResource(R.color.beige)
 
-            val notificationHelper = NotificationHelper(requireContext())
-            if (isClicked) {
 
+            if (isClicked) {
                 notificationHelper.cancelNotification()
             }
 
@@ -180,11 +180,12 @@ class ContactFragment : Fragment() {
             event5s.setBackgroundResource(if (isClicked) R.color.light_main else R.color.beige)
             event1m.setBackgroundResource(R.color.beige)
 
-            val notificationHelper = NotificationHelper(requireContext())
+
             if (isClicked) {
                 notificationHelper.scheduleNotification(true)
             } else {
                 notificationHelper.cancelNotification()
+
             }
         }
 
@@ -195,11 +196,12 @@ class ContactFragment : Fragment() {
             event5s.setBackgroundResource(R.color.beige)
             event1m.setBackgroundResource(if (isClicked) R.color.light_main else R.color.beige)
 
-            val notificationHelper = NotificationHelper(requireContext())
+
             if (isClicked) {
                 notificationHelper.scheduleNotification(false)
             } else {
                 notificationHelper.cancelNotification()
+
             }
         }
 
@@ -246,6 +248,7 @@ class ContactFragment : Fragment() {
 
                 // 다이얼로그 닫기
                 dialog.dismiss()
+                contactAdapter.notifyDataSetChanged()
 
             } else {
                 // 필수 정보가 입력되지 않은 경우 토스트 메시지 표시
