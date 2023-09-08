@@ -45,11 +45,10 @@ class ContactFragment : Fragment() {
     private lateinit var profileImage: CircleImageView
     private var selectedImageUri: Uri? = null
     private var isClicked = false
-
     // swipe x값
     private var swipeDx = 0f
     private var swipePosition = -1
-
+    private val notificationHelper : NotificationHelper by lazy { NotificationHelper(requireContext()) }
     companion object {
         const val REQUEST_PHONE_CALL = 1
         const val REQUEST_CODE_DETAIL = -1
@@ -165,13 +164,12 @@ class ContactFragment : Fragment() {
 
 
         eventOff.setOnClickListener {
-            isClicked = !isClicked
+            isClicked = !isClicked//true
 
-            eventOff.setBackgroundResource(if (isClicked) R.color.light_main else R.color.beige)
+            eventOff.setBackgroundResource(if (isClicked) R.color.light_main else R.color.beige)//true니깐 ㄱㄱ
             event5s.setBackgroundResource(R.color.beige)
             event1m.setBackgroundResource(R.color.beige)
 
-            val notificationHelper = NotificationHelper(requireContext())
             if (isClicked) {
 
                 notificationHelper.cancelNotification()
@@ -188,7 +186,7 @@ class ContactFragment : Fragment() {
             event5s.setBackgroundResource(if (isClicked) R.color.light_main else R.color.beige)
             event1m.setBackgroundResource(R.color.beige)
 
-            val notificationHelper = NotificationHelper(requireContext())
+
             if (isClicked) {
                 notificationHelper.scheduleNotification(true)
             } else {
@@ -203,7 +201,7 @@ class ContactFragment : Fragment() {
             event5s.setBackgroundResource(R.color.beige)
             event1m.setBackgroundResource(if (isClicked) R.color.light_main else R.color.beige)
 
-            val notificationHelper = NotificationHelper(requireContext())
+
             if (isClicked) {
                 notificationHelper.scheduleNotification(false)
             } else {
@@ -224,6 +222,7 @@ class ContactFragment : Fragment() {
             val name = nameEdit.text.toString()
             val phoneNumber = numberEdit.text.toString()
             val email = emailEdit.text.toString()
+
 
 
             // 필수 정보가 입력되었는지 확인
@@ -252,6 +251,7 @@ class ContactFragment : Fragment() {
 
                 // 다이얼로그 닫기
                 dialog.dismiss()
+                contactAdapter.notifyDataSetChanged()
 
             } else {
                 // 필수 정보가 입력되지 않은 경우 토스트 메시지 표시
@@ -276,8 +276,6 @@ class ContactFragment : Fragment() {
             }
         } else if (requestCode == REQUEST_CODE_DETAIL && resultCode == RESULT_OK) {
 
-//            val updatedBookmark = data?.getBooleanExtra("BOOKMARK", false)
-//            val phonumber = data?.getStringExtra("PHONE")
             val resultContact =
                 data?.getParcelableExtra<Contact>(DetailActivity.CONTACT_ITEM)// 객체를 받아옴
             val resultPosition =
@@ -291,13 +289,6 @@ class ContactFragment : Fragment() {
                 contactItems[resultPosition].profileImageUri = resultContact.profileImageUri
                 contactItems[resultPosition].isNew = resultContact.isNew
 
-//                for (contact in contactItems) {//포문을 이용해서 컨택트 아이템의 아이템의 북마크에 접근해서 새로운값으로 초기화
-//                    if (contact.phoneNumber == resultContact.phoneNumber) {
-//                        contact.bookmark = resultContact.bookmark
-//                        contact.name = resultContact.name
-//                        contact.name = resultContact.name
-//                    }
-//                }
                 contactAdapter.notifyDataSetChanged()
             }
         }
@@ -312,8 +303,7 @@ class ContactFragment : Fragment() {
             binding.RVArea.layoutManager = layoutManager
         }
         contactAdapter = ContactAdapter(contactItems, isGridMode) // 어댑터 다시 설정!!!!!!!!!
-        binding.RVArea.adapter =
-            contactAdapter // 어댑터를 다시 설정해주는건 버튼을 눌렀을때 어댑터가 그냥 그리드뷰로 바뀌기 때문에 바인딩해주고ㅓ 초기화
+        binding.RVArea.adapter = contactAdapter // 어댑터를 다시 설정해주는건 버튼을 눌렀을때 어댑터가 그냥 그리드뷰로 바뀌기 때문에 바인딩해주고ㅓ 초기화
 
         contactAdapter.productClick = object : ContactAdapter.ProductClick {
             override fun onClick(view: View, position: Int) {
@@ -329,15 +319,13 @@ class ContactFragment : Fragment() {
     private fun performSearch(query: String) {
         val chosungQuery = extractConsonant(query)
 
-        val filteredList =
-            ContactsManager.contactsList.filter { contact ->//컨택트아이템이 아닌 컨택트 매니저읰 컨택트리스트를 필터
-                val chosungName = extractConsonant(contact.name) // 초성변환후 변수 저장
-                chosungName.contains(chosungQuery, true) //초성이름이 초성쿼리에 포함된것 확인함
-            }
+        val filteredList = ContactsManager.contactsList.filter { contact ->//컨택트아이템이 아닌 컨택트 매니저읰 컨택트리스트를 필터
+            val chosungName =extractConsonant(contact.name) // 초성변환후 변수 저장
+            chosungName.contains(chosungQuery,true) //초성이름이 초성쿼리에 포함된것 확인함
+        }
         contactAdapter.updateContactList(filteredList)
 
     }
-
     private fun extractConsonant(input: String): String {
         val chosungBuilder = StringBuilder()//초성문자열저장하는거코틀린에 있는 클래스
 
@@ -368,30 +356,24 @@ class ContactFragment : Fragment() {
         }
     }
 
-    private val permissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-                Toast.makeText(context, "권한 허용", Toast.LENGTH_SHORT).show()
-                getContact()
-                contactAdapter.notifyDataSetChanged()
-            } else {
-                Toast.makeText(context, "권한을 거부", Toast.LENGTH_SHORT).show()
-            }
+    private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            Toast.makeText(context,"권한 허용",Toast.LENGTH_SHORT).show()
+            getContact()
+            contactAdapter.notifyDataSetChanged()
+        } else {
+            Toast.makeText(context,"권한을 거부",Toast.LENGTH_SHORT).show()
         }
+    }
 
     private fun requestPermission() {
         val readContactsPermission = Manifest.permission.READ_CONTACTS
-        if (ActivityCompat.shouldShowRequestPermissionRationale(
-                requireActivity(),
-                readContactsPermission
-            )
-        ) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), readContactsPermission)) {
             getContact() //true
         } else { // false
             permissionLauncher.launch(readContactsPermission)
         }
     }
-
     private fun getContact() {
         Toast.makeText(context, "연락처를 성공적으로 불러왔습니다!", Toast.LENGTH_SHORT).show()
         val resolver: ContentResolver = (activity as MainActivity).contentResolver

@@ -7,6 +7,11 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Messenger
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.TextView
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.EditText
@@ -15,6 +20,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
+import com.example.contacts.Adapter.ContactAdapter
 import com.example.contacts.Util.callPhoneNumber
 import com.example.contacts.Util.messagePhoneNumber
 import com.example.contacts.databinding.ActivityDetailBinding
@@ -25,6 +31,7 @@ class DetailActivity : AppCompatActivity() {
     private val EDIT_IMAGE_REQUEST_CODE_DETAIL = 6
     private lateinit var editImage: ImageView
     private var selectedImageUri: Uri? = null
+
 
     companion object {
         private lateinit var detailContact: Contact
@@ -67,14 +74,16 @@ class DetailActivity : AppCompatActivity() {
             }
 
             binding.bookmark.setOnClickListener {
+
                 detailContact.bookmark = !detailContact.bookmark
+
 
                 if (detailContact.bookmark) {
                     binding.bookmark.setBackgroundResource(R.drawable.clicked_bookmark)
-                    showSnackBarMessage("                                      ⭐즐찾⭐")
+                    showSnackBarMessage("⭐즐찾⭐")
                 } else {
                     binding.bookmark.setBackgroundResource(R.drawable.unclicked_bookmark)
-                    showSnackBarMessage("                                   ⭐즐찾해제⭐")
+                    showSnackBarMessage("⭐즐찾해제⭐")
                 }
             }
             // 뒤로가기 실행 시 데이터 넘겨줌
@@ -90,8 +99,6 @@ class DetailActivity : AppCompatActivity() {
                 resultIntent.putExtra(CONTACT_ITEM, detailContact) // 객체 콜백으로 전송
                 resultIntent.putExtra(CONTACT_POSITION, contactPosition) // 수정에 필요한 position
                 setResult(RESULT_OK, resultIntent)
-
-                finish()
             }
 
             fabCall.setOnClickListener {
@@ -170,8 +177,12 @@ class DetailActivity : AppCompatActivity() {
     }
 
     fun showSnackBarMessage(message: String) {
-        val snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT)
+       val snackbar =Snackbar.make(binding.root,message,Snackbar.LENGTH_SHORT)
+        val snackbarText =snackbar.view.findViewById(com.google.android.material.R.id.snackbar_text)as TextView
+
+        snackbarText.textAlignment = View.TEXT_ALIGNMENT_CENTER
         snackbar.show()
+
     }
 
 }

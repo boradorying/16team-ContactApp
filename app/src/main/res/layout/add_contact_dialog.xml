@@ -40,9 +40,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:ems="10"
-            android:inputType="text"
             android:fontFamily="@font/komi"
             android:hint="이름"
+            android:inputType="text"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -54,10 +54,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:ems="10"
-            android:inputType="phone"
-            android:hint="전화번호"
-            android:textStyle="bold"
             android:fontFamily="@font/komi"
+            android:hint="전화번호"
+            android:inputType="phone"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nameEdit" />
@@ -77,50 +77,49 @@
             app:layout_constraintTop_toBottomOf="@+id/numberEdit" />
 
 
-
         <Button
             android:id="@+id/eventBtn1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="220dp"
+            android:layout_marginTop="16dp"
             android:background="@color/beige"
             android:fontFamily="@font/komi"
             android:text="OFF"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.179"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.786" />
+            app:layout_constraintEnd_toStartOf="@+id/eMailEdit"
+            app:layout_constraintStart_toStartOf="@+id/eMailEdit"
+            app:layout_constraintTop_toBottomOf="@+id/eMailEdit" />
 
         <Button
             android:id="@+id/eventBtn2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="332dp"
+            android:layout_marginTop="16dp"
             android:background="@color/beige"
             android:fontFamily="@font/komi"
-            android:text="5초"
+            android:text="5분"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="@+id/eMailEdit"
+            app:layout_constraintStart_toStartOf="@+id/eMailEdit"
+            app:layout_constraintTop_toBottomOf="@+id/eMailEdit" />
 
         <Button
             android:id="@+id/eventBtn3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="163dp"
             android:background="@color/beige"
             android:fontFamily="@font/komi"
-            android:text="10초"
+            android:text="1시간"
+
+
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.823"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.786" />
+            app:layout_constraintBottom_toBottomOf="@+id/eventBtn1"
+
+            app:layout_constraintStart_toStartOf="@+id/eMailEdit"
+            app:layout_constraintTop_toBottomOf="@+id/eMailEdit"
+            app:layout_constraintVertical_bias="1.0" />
 
         <Button
             android:id="@+id/cancelBt"
