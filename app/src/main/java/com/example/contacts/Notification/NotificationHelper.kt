@@ -43,7 +43,6 @@ class NotificationHelper(private val context: Context) {
             notificationManager.createNotificationChannel(channel)
         }
     }
-
     // 알람 예약
     fun scheduleNotification(is5Seconds: Boolean = true,name:String) {
         notificationJob =
@@ -61,9 +60,8 @@ class NotificationHelper(private val context: Context) {
         notificationIntent.action = "com.example.contacts.NOTIFICATION_ACTION"
 
         val requestCode = NOTIFICATION_ID
-        lastScheduledRequestCode = requestCode//리퀘스트코드를 마지막리퀘스트코드에 넣기
-
         val notificationId = NOTIFICATION_ID + requestCode
+
         notificationIntent.putExtra("notificationId", notificationId)
 
         val pendingIntent = PendingIntent.getActivity(//온리시브를 호출, 예약된 시간이 지나면
@@ -73,10 +71,11 @@ class NotificationHelper(private val context: Context) {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.baseline_add_ic_call_24)
             .setContentTitle("새로운 연락처 등록 알람입니다")
-            .setContentText("5분뒤 $name 전화거세요")
+            .setContentText(" $name 에게 전화걸 시간 입니다~")
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
@@ -87,14 +86,12 @@ class NotificationHelper(private val context: Context) {
                 Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-
             return
         }
         notificationManager.notify(notificationId, builder.build())
     }
 
     fun cancelNotification() {
-
         notificationJob?.cancel()//훨씬더 간결해지기때문에 코루틴을 쓸 수 있는 경험!!
         Log.d("jun", "notification cancle: ${notificationJob}")
     }
