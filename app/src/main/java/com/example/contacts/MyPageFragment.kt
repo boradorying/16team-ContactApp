@@ -20,11 +20,13 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class MyPageFragment : Fragment() {
     private lateinit var binding: FragmentMyPageBinding
+    companion object{
+        val EDIT_IMAGE_REQUEST_CODE = 5
+
+    }
     private var selectedImageUri: Uri? = null
-    private val PICK_IMAGE_REQUEST_CODE = 100
     private lateinit var editImage: ImageView
     //kotlin lateinit check
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +36,7 @@ class MyPageFragment : Fragment() {
         binding = FragmentMyPageBinding.inflate(inflater, container, false)
 
         binding.editBtn.setOnClickListener {
+
             val builder = AlertDialog.Builder((activity as MainActivity))
             builder.setTitle("EDIT")
 
@@ -45,12 +48,13 @@ class MyPageFragment : Fragment() {
             val editEmail: EditText = v1.findViewById(R.id.et_edit_email)
             val ibEditImg: ImageButton = v1.findViewById(R.id.ib_edit_img)
             editImage = v1.findViewById(R.id.iv_edit_img)
+            editImage.setImageDrawable(binding.ivUser.drawable)
 
             // 갤러리에서 이미지 선택을 위한 코드
             ibEditImg.setOnClickListener {
                 val intent =
                     Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                startActivityForResult(intent, PICK_IMAGE_REQUEST_CODE)
+                startActivityForResult(intent, EDIT_IMAGE_REQUEST_CODE)
             }
 
             // p0에 해당 AlertDialog가 들어온다. findViewById를 통해 view를 가져와서 사용
@@ -86,7 +90,7 @@ class MyPageFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == EDIT_IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
             selectedImageUri = data.data
             try {
                 editImage.setImageURI(selectedImageUri)
