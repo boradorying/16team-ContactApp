@@ -23,6 +23,12 @@
 
 ---
 
+## Application Version
+* minSdk 28
+* targetSdk 33
+
+---
+
 ## 💻기술스택
 
 - Language - kotlin
