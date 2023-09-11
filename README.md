@@ -71,14 +71,14 @@
 - 디테일 페이지에서 좋아요 설정시 토스트 메시지 출력
 - 전화와 동일하게 intent를 사용한 권한 요청 방식으로 문자기능 구현
 
-### 5. 연락처 추가 기능 및 알림 기
+### 5. 연락처 추가 기능 및 알림 기능
 
 <img src="https://github.com/16-team/16-team/assets/139097952/92c73d95-1a14-42d3-9ca7-603bec2f5bcc"  width="200">
 <img src="https://github.com/16-team/16-team/assets/139097952/e091898b-ebac-4ee6-8c24-b0202aa040fb"  width="200">
 
 - 이름, 전화번호, 이메일, 갤러리에서 불러온 사진(URI) 의 정보를 저장버튼을 눌렀을 때 입력한 정보를  dataclass를 통해 recyclerView 어댑터로 전달.
 - 사진 선택을 안 했을 때 기본사진으로 나오게 했음.
-- CoroutineScope, PendongIntent 를 사용하여 버튼을 누르면 어플 상단 알림바에 Message 표
+- CoroutineScope, PendongIntent 를 사용하여 버튼을 누르면 어플 상단 알림바에 Message 표시시
 
 ### 6. 연락처 동기화 기능
 
